@@ -1,0 +1,25 @@
+name: pytorch-single-gpu
+tags: [pytorch, gpu, single-node]
+description: PyTorch single-GPU training
+
+job:
+  - srun
+  - --account={{ extra_args.account }}
+  - --partition={{ extra_args.partition }}
+  - --gpus-per-node=1
+  - --ntasks-per-node=1
+  - --cpus-per-task=7
+  - --mem-per-gpu=60G
+  - --time=00:30:00
+  - singularity
+  - run
+  - "{{ extra_args.sif }}"
+  - bash -c
+  - "{{ snippet.script }}"
+
+snippets:
+  - name: script
+    content: |
+      cd applications/pytorch
+      source venv/bin/activate
+      python3 visiontransformer.py
