@@ -1,17 +1,17 @@
 name: pytorch-ddp-multi-node
-tags: [ddp, gpu, multi-node]
+tags: [gpu, pytorch, multi-gpu, multi-node]
 description: PyTorch DDP multi-node training
 
 job:
   - srun
-  - --account {{ extra_args.account }}
-  - --partition {{ extra_args.partition }}
-  - --time 00:15:00
-  - --nodes 2
-  - --gpus-per-node 2
-  - --ntasks-per-node 1
-  - --cpus-per-task 16
-  - --mem-per-cpu 8G
+  - --account={{ extra_args.account }}
+  - --partition={{ extra_args.partition }}
+  - --nodes=4
+  - --gpus-per-node=8
+  - --ntasks-per-node=1
+  - --cpus-per-task=56
+  - --mem-per-gpu=60G
+  - --time=00:30:00
   - singularity
   - run
   - "{{ extra_args.sif }}"
@@ -29,13 +29,13 @@ snippets:
       # Set rendezvous port using job ID, as the default port is likely in use
       RDZV_PORT="1""${SLURM_JOB_ID:0-4}"
 
-      RDZV_ENDPOINT=$RDZV_HOST:$RDZV_PORT
-      echo RDZV_ENDPOINT=$RDZV_ENDPOINT
+      cd applications/pytorch
+      source venv/bin/activate
 
-      torchrun \
+      python3 -m torch.distributed.run \
         --nnodes=$SLURM_NNODES \
         --nproc_per_node=$SLURM_GPUS_PER_NODE \
         --rdzv-id=$SLURM_JOB_ID \
         --rdzv-backend=c10d \
-        --rdzv-endpoint=$RDZV_ENDPOINT \
-        applications/pytorch/ddp_example.py
+        --rdzv-endpoint=$RDZV_HOST:$RDZV_PORT \
+        ddp_visiontransformer.py

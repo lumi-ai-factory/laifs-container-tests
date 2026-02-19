@@ -1,5 +1,8 @@
-__pycache__/
+*.hdf5
+*.pth
+
 .venv/
+__pycache__/
 venv/
 
 /out/
