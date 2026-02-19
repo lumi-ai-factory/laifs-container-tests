@@ -21,6 +21,9 @@ job:
 snippets:
   - name: script
     content: |
+      source exec-env/bin/activate
+      export DATADIR=$PWD/data
+
       # torchrun sets this if not already set, here we avoid the warning message
       export OMP_NUM_THREADS=1
 
@@ -30,7 +33,6 @@ snippets:
       RDZV_PORT="1""${SLURM_JOB_ID:0-4}"
 
       cd applications/pytorch
-      source venv/bin/activate
 
       python3 -m torch.distributed.run \
         --nnodes=$SLURM_NNODES \

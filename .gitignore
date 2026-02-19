@@ -1,8 +1,7 @@
-*.hdf5
-*.pth
-
-.venv/
 __pycache__/
-venv/
 
+/data/
 /out/
+
+/exec-env/
+/runner-env/

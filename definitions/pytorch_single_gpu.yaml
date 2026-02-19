@@ -20,6 +20,8 @@ job:
 snippets:
   - name: script
     content: |
+      source exec-env/bin/activate
+      export DATADIR=$PWD/data
+
       cd applications/pytorch
-      source venv/bin/activate
       python3 visiontransformer.py

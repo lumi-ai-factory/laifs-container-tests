@@ -61,7 +61,7 @@ def train_model(model, criterion, optimizer, train_loader, val_loader, epochs=10
 
 
 with HDF5Dataset(
-    "./train_images.hdf5", transform=transform
+    f"{os.environ['DATADIR']}/pytorch/train_images.hdf5", transform=transform
 ) as full_train_dataset:
     # Subset the dataset for benchmarking
     full_train_dataset = torch.utils.data.Subset(
@@ -78,4 +78,4 @@ with HDF5Dataset(
     val_loader = DataLoader(val_dataset, batch_size=32, shuffle=True, num_workers=7)
     train_model(model, criterion, optimizer, train_loader, val_loader, epochs=5)
 
-torch.save(model.state_dict(), "vit_b_16_imagenet.pth")
+torch.save(model.state_dict(), f"{os.environ['DATADIR']}/pytorch/vit_b_16_imagenet.pth")
