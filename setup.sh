@@ -15,7 +15,8 @@ pip install -U pip -r requirements_runner.txt
 deactivate
 
 # Set up execution environment
-singularity run /appl/local/laifs/containers/lumi-multitorch-latest.sif \
+singularity run \
+    /appl/local/laifs/containers/lumi-multitorch-u24r64f21m43t29-20260216_093549/lumi-multitorch-full-u24r64f21m43t29-20260216_093549.sif \
     bash -c "python3 -m venv exec-env --system-site-packages; \
         source exec-env/bin/activate; \
         pip install -r requirements_exec.txt"
