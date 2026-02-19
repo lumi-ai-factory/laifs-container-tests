@@ -1,0 +1,98 @@
+name: bitsandbytes-inference
+tags: [bitsandbytes]
+description: BitsAndBytes inference
+
+job:
+  - srun
+  - --account={{ extra_args.account }}
+  - --partition={{ extra_args.partition }}
+  - --gpus-per-node=1
+  - --ntasks-per-node=1
+  - --cpus-per-task=7
+  - --mem-per-gpu=60G
+  - --time=00:30:00
+  - singularity
+  - run
+  - "{{ extra_args.sif }}"
+  - bash -c
+  - "{{ snippet.script }}"
+
+snippets:
+  - name: script
+    content: |
+      source exec-env/bin/activate
+
+      export DATADIR=$PWD/data
+      export HF_HOME=$DATADIR/huggingface
+
+      cd applications/bitsandbytes
+
+      python3 inference_benchmark.py \
+        LumiOpen/Llama-Poro-2-8B-base \
+        --configs int8 \
+        --batches=8 \
+        --out-dir=$DATADIR/bitsandbytes/reports \
+        --iterations=1 \
+        --warmup-runs=0 \
+
+parse: |
+  def parse(text, params):
+      import json
+      for line in text.splitlines():
+          try:
+              data = json.loads(line)
+              return {
+                  "load_model_latency": {
+                      "value": data["load_model"]["latency"]["mean"],
+                      "unit": data["load_model"]["latency"]["unit"],
+                  },
+                  "generate_throughput": {
+                      "value": data["generate"]["throughput"]["value"],
+                      "unit": data["generate"]["throughput"]["unit"],
+                  },
+                  "prefill_throughput": {
+                      "value": data["prefill"]["throughput"]["value"],
+                      "unit": data["prefill"]["throughput"]["unit"],
+                  },
+                  "decode_throughput": {
+                      "value": data["decode"]["throughput"]["value"],
+                      "unit": data["decode"]["throughput"]["unit"],
+                  },
+                  "per_token_latency": {
+                      "value": data["per_token"]["latency"]["mean"],
+                      "unit": data["per_token"]["latency"]["unit"],
+                  },
+              }
+          except:
+              continue
+
+validate: |
+  def validate(results, params):
+      if not results:
+          return (False, "parse_error")
+
+      limits = {
+          "load_model_latency": {"type": "max", "unit": "s", "value": 60},
+          "generate_throughput": {"type": "min", "unit": "samples/s", "value": 50},
+          "prefill_throughput": {"type": "min", "unit": "samples/s", "value": 2.5},
+          "decode_throughput": {"type": "min", "unit": "samples/s", "value": 75},
+          "per_token_latency": {"type": "max", "unit": "s", "value": 1.0},
+      }
+
+      ok = True
+      validate_out = []
+
+      for metric, limit in limits.items():
+          res = results[metric]
+          if (
+              limit["type"] == "max" and res["value"] > limit["value"]
+              or limit["type"] == "min" and res["value"] < limit["value"]
+          ):
+              ok = False
+          validate_out.append(
+              f"Metric {metric},"
+              + f" Limit {limit['value']} {limit['unit']} ({limit['type']}),"
+              + f" Value {res['value']} {res['unit']}"
+          )
+
+      return (ok, " | ".join(validate_out))

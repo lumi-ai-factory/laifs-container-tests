@@ -1,5 +1,8 @@
 __pycache__/
 
+# Optimum-Benchmark writes a log file for BitsAndBytes
+*.log
+
 /data/
 /out/
 

@@ -1,2 +1,5 @@
-# LUMI-AI-Guide
-h5py
+# BitsAndBytes
+optimum-benchmark==0.6.0
+
+# PyTorch
+h5py==3.15.1
