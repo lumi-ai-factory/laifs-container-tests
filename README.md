@@ -35,11 +35,13 @@ configuration file that is last in alphabetical order in the `config` directory.
 configuration files follow the naming scheme of LUMI AIF container image releases, this corresponds
 to the most recent release.
 
+**Set up environment using the last config file in alphabetical order**
 ```bash
-# Set up environment using the last config file in alphabetical order
 bash setup.sh
+```
 
-# Set up environment using a specific configuration file
+**Set up environment using a specific configuration file**
+```bash
 bash setup.sh config/lumi-multitorch-full-u24r64f21m43t29-20260216_093549.json
 ```
 
@@ -60,32 +62,40 @@ on LUMI. The main purpose of the module is bind mounting important directories s
 accessed inside the container. If you are working on LUMI, load this module. On other systems, you
 can, for example, use the `SINGULARITY_BIND` environment variable to bind the directories you need.
 
+**Bind directories on LUMI**
 ```bash
-# On LUMI
 module purge
 module use /appl/local/laifs/modules
 module load lumi-aif-singularity-bindings
+```
 
-# On other systems
+**Bind directories on other systems**
+```bash
 export SINGULARITY_BIND=<dir1>,<dir2>,  # replace with the desired directories
 ```
 
 Having completed the previous steps, you are ready to run the tests. Below are a few examples of
 how to use Unframe for this.
 
+**Run all tests**
 ```bash
-# Run all tests
 unframe --dir definitions \
     --extra-args-file config/lumi-multitorch-full-u24r64f21m43t29-20260216_093549.json
+```
 
-# Run test with the name `transformers-inference-sdpa`
+**Run test(s) with the name `transformers-inference-sdpa`**
+```bash
 unframe --dir definitions --name transformers-inference-sdpa \
     --extra-args-file config/lumi-multitorch-full-u24r64f21m43t29-20260216_093549.json
+```
 
-# Run all tests with the tag `transformers`
+**Run test(s) with the tag `transformers`**
+```bash
 unframe --dir definitions --tag transformers \
     --extra-args-file config/lumi-multitorch-full-u24r64f21m43t29-20260216_093549.json
 ```
+
+For more information on how to use Unframe, run `unframe --help`.
 
 ### Inspecting results
 
