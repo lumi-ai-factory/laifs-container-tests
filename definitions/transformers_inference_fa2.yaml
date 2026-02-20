@@ -1,0 +1,96 @@
+name: transformers-inference-fa2
+tags: [transformers, inference, flash-attention]
+description: Transformers inference with Flash Attention 2
+
+job:
+  - srun
+  - --account={{ extra_args.account }}
+  - --partition={{ extra_args.partition }}
+  - --gpus-per-node=1
+  - --ntasks-per-node=1
+  - --cpus-per-task=7
+  - --mem-per-gpu=60G
+  - --time=00:30:00
+  - singularity
+  - run
+  - "{{ extra_args.sif }}"
+  - bash -c
+  - "{{ snippet.script }}"
+
+snippets:
+  - name: script
+    content: |
+      source exec-env/bin/activate
+
+      export DATADIR=$PWD/data
+      export HF_HOME=$DATADIR/huggingface
+
+      cd applications/transformers
+
+      python3 run_benchmarks.py \
+          --output-dir=$DATADIR/transformers/benchmark_results \
+          --model-id=LumiOpen/Llama-Poro-2-8B-base \
+          --batch-size=8 \
+          --sequence-length=128 \
+          --num-tokens-to-generate=128 \
+          --config-file=config/fa2.json \
+          --commit-id=556312c \
+          --no-gpu-monitoring
+
+parse: |
+  def parse(text, params):
+      import re
+
+      metrics = {
+          "E2E Latency": "e2e_latency",
+          "Time to First Token": "time_to_first_token",
+          "Inter-Token Latency": "inter_token_latency",
+          "Throughput": "throughput",
+      }
+
+      results = {}
+      for key, val in metrics.items():
+          match = re.search(fr"{key}.+avg=(\d+\.?\d*)([^\s]+)", text)
+          if match:
+              results[val] = {
+                  "unit": match.groups()[1],
+                  "value": float(match.groups()[0]),
+              }
+
+      return results
+
+validate: |
+  def validate(results, params):
+      import json
+
+      if not results:
+          return (False, "Error parsing results")
+
+      limits = {
+          "e2e_latency": {"type": "max", "unit": "s", "value": 10},
+          "time_to_first_token": {"type": "max", "unit": "ms", "value": 500},
+          "inter_token_latency": {"type": "max", "unit": "ms", "value": 50},
+          "throughput": {"type": "min", "unit": "tok/s", "value": 200},
+      }
+
+      all_ok = True
+      validate_res = {}
+
+      for metric, limit in limits.items():
+          res = results[metric]
+          ok = True
+
+          if (
+              limit["type"] == "max" and res["value"] > limit["value"]
+              or limit["type"] == "min" and res["value"] < limit["value"]
+          ):
+              ok = False
+              all_ok = False
+
+          validate_res[metric] = {
+              "limit": f"{limit['value']} {limit['unit']} ({limit['type']})",
+              "value": f"{res['value']} {res['unit']}",
+              "status": "pass" if ok else "fail",
+          }
+
+      return (all_ok, json.dumps(validate_res))

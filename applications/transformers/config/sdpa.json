@@ -1,1 +1,1 @@
-{"gpu_monitoring": false, "attn_implementation": "sdpa"}
+{"attn_implementation": "sdpa"}
