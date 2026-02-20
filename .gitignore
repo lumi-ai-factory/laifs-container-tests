@@ -1,8 +1,8 @@
-__pycache__/
-
-# Optimum-Benchmark writes a log file for BitsAndBytes
-*.log
-
 /.virtualenvs/
 /data/
 /out/
+
+# Optimum-Benchmark writes a log file for BitsAndBytes
+/applications/bitsandbytes/benchmark.log
+
+__pycache__/

@@ -1,6 +1,3 @@
-# Adapted from:
-# https://github.com/bitsandbytes-foundation/bitsandbytes/blob/eb3064f952988b041289a039fc1ac140b8c09148/benchmarking/inference_benchmark.py
-
 """
 Inference benchmarking tool.
 

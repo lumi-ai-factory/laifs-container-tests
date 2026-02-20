@@ -1,6 +1,3 @@
-# Copied from:
-# https://github.com/Lumi-supercomputer/LUMI-AI-Guide/blob/6bc200c40cb1fc4220985b9500b45fe5c5b74c35/resources/hdf5_dataset.py
-
 import torch
 from torch.utils.data import Dataset
 from torchvision.transforms.functional import to_pil_image

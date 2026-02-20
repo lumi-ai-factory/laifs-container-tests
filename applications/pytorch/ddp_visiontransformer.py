@@ -1,6 +1,3 @@
-# Adapted from:
-# https://github.com/Lumi-supercomputer/LUMI-AI-Guide/blob/6bc200c40cb1fc4220985b9500b45fe5c5b74c35/5-multi-gpu-and-node/ddp_visiontransformer.py
-
 import torch
 import os
 import time

@@ -1,6 +1,3 @@
-# Adapted from:
-# https://github.com/Lumi-supercomputer/LUMI-AI-Guide/blob/6bc200c40cb1fc4220985b9500b45fe5c5b74c35/1-quickstart/visiontransformer.py
-
 from torch.utils.data import DataLoader, random_split
 import torch
 import torchvision.transforms as transforms

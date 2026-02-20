@@ -18,7 +18,7 @@ echo
 mkdir -p .virtualenvs data
 
 # Get training data for PyTorch tests
-if [ ! -f data/train_images.hdf5 ]; then
+if [ ! -f data/pytorch/train_images.hdf5 ]; then
     cp /appl/local/training/LUMI-AI-Guide/tiny-imagenet-dataset.hdf5 data/train_images.hdf5
 fi
 

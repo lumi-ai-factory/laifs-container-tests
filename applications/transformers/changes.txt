@@ -1,0 +1,19 @@
+############################################################
+--- https://raw.githubusercontent.com/huggingface/transformers/708d3e125150569436f8db0ca608a9a47f876814/benchmark_v2/run_benchmarks.py
++++ run_benchmarks.py
+############################################################
+--- https://raw.githubusercontent.com/huggingface/transformers/708d3e125150569436f8db0ca608a9a47f876814/benchmark_v2/benchmark_scripts/continuous_batching_overall.py
++++ benchmark_scripts/continuous_batching_overall.py
+############################################################
+--- https://raw.githubusercontent.com/huggingface/transformers/708d3e125150569436f8db0ca608a9a47f876814/benchmark_v2/framework/benchmark_config.py
++++ framework/benchmark_config.py
+############################################################
+--- https://raw.githubusercontent.com/huggingface/transformers/708d3e125150569436f8db0ca608a9a47f876814/benchmark_v2/framework/benchmark_runner.py
++++ framework/benchmark_runner.py
+############################################################
+--- https://raw.githubusercontent.com/huggingface/transformers/708d3e125150569436f8db0ca608a9a47f876814/benchmark_v2/framework/data_classes.py
++++ framework/data_classes.py
+############################################################
+--- https://raw.githubusercontent.com/huggingface/transformers/708d3e125150569436f8db0ca608a9a47f876814/benchmark_v2/framework/hardware_metrics.py
++++ framework/hardware_metrics.py
+############################################################

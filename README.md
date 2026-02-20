@@ -11,8 +11,12 @@ This repository provides a set of tests for benchmarking container images built 
 
 **This repository contains:**
 
-- **Definition files** for running tests with the [Unframe runner](github.com/viahlgre/unframe).
-- **Application benchmarks** representative of the typical usage of the library in question.
+- **Definition files** for running tests with the [Unframe test runner](github.com/viahlgre/unframe).
+- **Configuration files** for specifying additional parameters for tests.
+- **Application benchmarks** representative of typical usage:
+    - **Benchmark files** for running deep learning workloads.
+    - **Source files** listing the origins of the benchmark files.
+    - **Change logs** listing any local changes made to the benchmark files.
 
 ---
 
@@ -35,14 +39,14 @@ configuration file that is last in alphabetical order in the `config` directory.
 configuration files follow the naming scheme of LUMI AIF container image releases, this corresponds
 to the most recent release.
 
-Set up environment using the last config file in alphabetical order:
+Set up environment using the last configuration file in alphabetical order:
 ```bash
-bash setup.sh
+bash scripts/setup.sh
 ```
 
 Set up environment using a specific configuration file:
 ```bash
-bash setup.sh config/lumi-multitorch-full-u24r64f21m43t29-20260216_093549.json
+bash scripts/setup.sh config/lumi-multitorch-full-u24r64f21m43t29-20260216_093549.json
 ```
 
 ### Running tests

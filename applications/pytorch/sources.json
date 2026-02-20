@@ -1,0 +1,5 @@
+{
+    "ddp_visiontransformer.py": "https://raw.githubusercontent.com/Lumi-supercomputer/LUMI-AI-Guide/6bc200c40cb1fc4220985b9500b45fe5c5b74c35/5-multi-gpu-and-node/ddp_visiontransformer.py",
+    "hdf5_dataset.py": "https://raw.githubusercontent.com/Lumi-supercomputer/LUMI-AI-Guide/6bc200c40cb1fc4220985b9500b45fe5c5b74c35/resources/hdf5_dataset.py",
+    "visiontransformer.py": "https://raw.githubusercontent.com/Lumi-supercomputer/LUMI-AI-Guide/6bc200c40cb1fc4220985b9500b45fe5c5b74c35/1-quickstart/visiontransformer.py"
+}
