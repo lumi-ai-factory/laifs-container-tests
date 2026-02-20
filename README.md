@@ -87,8 +87,6 @@ unframe --dir definitions --tag transformers \
     --extra-args-file config/lumi-multitorch-full-u24r64f21m43t29-20260216_093549.json
 ```
 
----
-
 ### Inspecting results
 
 The results of any tests you run are printed to your terminal. Additionally, Unframe logs the
