@@ -1,0 +1,5 @@
+{
+    "account": "project_xxxxxxxxx",
+    "partition": "dev-g",
+    "sif": "/appl/local/laifs/containers/lumi-multitorch-u24r64f21m43t29-20260216_093549/lumi-multitorch-full-u24r64f21m43t29-20260216_093549.sif"
+}

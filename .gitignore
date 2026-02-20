@@ -3,8 +3,6 @@ __pycache__/
 # Optimum-Benchmark writes a log file for BitsAndBytes
 *.log
 
+/.virtualenvs/
 /data/
 /out/
-
-/exec-env/
-/runner-env/
