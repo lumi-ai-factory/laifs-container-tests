@@ -101,3 +101,9 @@ results in CSV files, which are by default located under `out/perflogs/generic\:
 We welcome contributions! Please open an
 [issue](https://github.com/lumi-ai-factory/laifs-container-tests/issues) or submit a pull request.
 
+---
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
+
