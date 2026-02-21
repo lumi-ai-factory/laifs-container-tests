@@ -32,7 +32,7 @@ def main(input_dir):
 
         lines_new.append(line)
 
-    print("".join(lines_new))
+    print("".join(lines_new), end="")
 
 
 if __name__ == "__main__":
