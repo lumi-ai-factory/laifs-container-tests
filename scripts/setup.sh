@@ -9,7 +9,7 @@ if [ -z $config_file ]; then
     config_file=$(ls -1 ./config/* | tail -n 1)
 fi
 sif=$(cat $config_file | jq -r .sif)
-image_name=$(echo $sif | sed -E 's,.*/(.*).*\..*,\1,')
+image_name=$(basename $sif .sif)
 
 echo "Running setup for image $image_name..."
 echo

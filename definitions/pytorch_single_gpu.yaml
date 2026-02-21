@@ -20,7 +20,8 @@ job:
 snippets:
   - name: script
     content: |
-      source exec-env/bin/activate
+      source .virtualenvs/$(basename $SINGULARITY_NAME .sif)/bin/activate                                
+
       export DATADIR=$PWD/data
 
       cd applications/pytorch

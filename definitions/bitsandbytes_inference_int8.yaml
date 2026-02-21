@@ -1,6 +1,6 @@
-name: bitsandbytes-inference
-tags: [bitsandbytes]
-description: BitsAndBytes inference
+name: bitsandbytes-inference-int8
+tags: [bitsandbytes, inference]
+description: BitsAndBytes inference with INT8 quantization
 
 job:
   - srun
@@ -20,7 +20,7 @@ job:
 snippets:
   - name: script
     content: |
-      source exec-env/bin/activate
+      source .virtualenvs/$(basename $SINGULARITY_NAME .sif)/bin/activate
 
       export DATADIR=$PWD/data
       export HF_HOME=$DATADIR/huggingface
@@ -68,8 +68,10 @@ parse: |
 
 validate: |
   def validate(results, params):
+      import json
+
       if not results:
-          return (False, "parse_error")
+          return (False, "Failed to parse results")
 
       limits = {
           "load_model_latency": {"type": "max", "unit": "s", "value": 60},
@@ -79,20 +81,24 @@ validate: |
           "per_token_latency": {"type": "max", "unit": "s", "value": 1.0},
       }
 
-      ok = True
-      validate_out = []
+      all_ok = True
+      validate_res = {}
 
       for metric, limit in limits.items():
           res = results[metric]
+          ok = True
+
           if (
               limit["type"] == "max" and res["value"] > limit["value"]
               or limit["type"] == "min" and res["value"] < limit["value"]
           ):
               ok = False
-          validate_out.append(
-              f"Metric {metric},"
-              + f" Limit {limit['value']} {limit['unit']} ({limit['type']}),"
-              + f" Value {res['value']} {res['unit']}"
-          )
+              all_ok = False
 
-      return (ok, " | ".join(validate_out))
+          validate_res[metric] = {
+              "limit": f"{limit['value']} {limit['unit']} ({limit['type']})",
+              "value": f"{res['value']} {res['unit']}",
+              "status": "pass" if ok else "fail",
+          }
+
+      return (all_ok, json.dumps(validate_res))

@@ -20,7 +20,7 @@ job:
 snippets:
   - name: script
     content: |
-      source exec-env/bin/activate
+      source .virtualenvs/$(basename $SINGULARITY_NAME .sif)/bin/activate                                
 
       export DATADIR=$PWD/data
       export HF_HOME=$DATADIR/huggingface
@@ -64,7 +64,7 @@ validate: |
       import json
 
       if not results:
-          return (False, "Error parsing results")
+          return (False, "Failed to parse results")
 
       limits = {
           "e2e_latency": {"type": "max", "unit": "s", "value": 10},

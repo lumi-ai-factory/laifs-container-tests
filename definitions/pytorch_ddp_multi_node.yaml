@@ -21,12 +21,11 @@ job:
 snippets:
   - name: script
     content: |
-      source exec-env/bin/activate
-      export DATADIR=$PWD/data
+      source .virtualenvs/$(basename $SINGULARITY_NAME .sif)/bin/activate
 
+      export DATADIR=$PWD/data
       # torchrun sets this if not already set, here we avoid the warning message
       export OMP_NUM_THREADS=1
-
       # This would be cleaner with scontrol, but it is not in the container
       RDZV_HOST="nid""$(echo $SLURM_JOB_NODELIST | grep -Eo [0-9]+ | head -n 1)"
       # Set rendezvous port using job ID, as the default port is likely in use
