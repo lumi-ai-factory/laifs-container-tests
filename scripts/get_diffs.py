@@ -7,22 +7,23 @@ import urllib.request
 
 
 def main():
-    p = Path("applications")
+    apps_dir = Path("applications")
 
-    for appdir in p.iterdir():
-        matches = list(appdir.glob("sources.json"))
-        if not matches:
+    for app_dir in apps_dir.iterdir():
+        source_file = app_dir / "sources.json"
+        diff_file = app_dir / "diff.txt"
+
+        if not source_file.exists():
             continue
-
-        with open(matches[0]) as f:
+        with open(source_file) as f:
             sources = json.load(f)
 
-        with open(appdir / "diff.txt", "w"):
+        with open(diff_file, "w"):
             # Erase file contents
             pass
 
         for local, remote in sources.items():
-            with open(appdir / local) as f:
+            with open(app_dir / local) as f:
                 lines_local = f.read().splitlines(keepends=True)
             with urllib.request.urlopen(remote) as f:
                 lines_remote = f.read().decode("utf-8").splitlines(keepends=True)
@@ -33,7 +34,7 @@ def main():
                 )
             )
 
-            with open(appdir / "diff.txt", "a") as f:
+            with open(diff_file, "a") as f:
                 f.writelines(lines_diff)
 
 

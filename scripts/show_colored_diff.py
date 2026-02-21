@@ -1,19 +1,21 @@
 #!/bin/env python3
 
 import json
+from pathlib import Path
 import re
 import sys
 
 
-def main(input_dir):
-    with open(input_dir + "/sources.json") as f:
-        sources = json.load(f)
+def main(input_file):
+    diff_file = Path(input_file)
 
-    with open(input_dir + "/diff.txt") as f:
+    with open(diff_file) as f:
         lines_old = f.readlines()
 
-    lines_new = []
+    with open(diff_file.parent / "sources.json") as f:
+        sources = json.load(f)
 
+    lines_new = []
     for line in lines_old:
         for local, remote in sources.items():
             # Filenames in bold
@@ -24,7 +26,6 @@ def main(input_dir):
         line = re.sub(
             r"^(@@\s-\d+,\d+\s\+\d+,\d+\s@@)", "\033[36m" + r"\1" + "\033[0m", line
         )
-
         # Old in red
         line = re.sub(r"^(-.*)$", "\033[31m" + r"\1" + "\033[0m", line)
         # New in green
