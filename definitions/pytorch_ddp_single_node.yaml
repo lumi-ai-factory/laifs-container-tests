@@ -1,4 +1,4 @@
-name: pytorch-ddp-single-node
+name: pytorch_ddp_single_node
 tags: [gpu, pytorch, multi-gpu, single-node]
 description: PyTorch DDP single-node training
 
@@ -34,3 +34,65 @@ snippets:
         --nnodes=$SLURM_NNODES \
         --nproc_per_node=$SLURM_GPUS_PER_NODE \
         ddp_visiontransformer.py
+
+parse: |
+  def parse(text, params):
+      import re
+      from statistics import mean
+
+      results = {
+          "loss_avg": {
+              "pattern": r"Loss: (\d+\.\d+)",
+              "values": [],
+          },
+          "acc_avg": {
+              "pattern": r"Accuracy: (\d+\.\d+)",
+              "values": [],
+          },
+          "time_avg": {
+              "pattern": r"Time: (\d+\.\d+)",
+              "values": [],
+          },
+      }
+
+      for key, val in results.items():
+          results[key]["values"] = [
+              float(s) for s in re.findall(val["pattern"], text)
+          ]
+
+      return {k: mean(v["values"]) for k, v in results.items()}
+
+validate: |
+  def validate(results, params):
+      import json
+
+      if not results:
+          return (False, "no results to validate")
+
+      limits = {
+          "loss_avg": {"type": "max", "unit": "", "value": 3.0},
+          "acc_avg": {"type": "min", "unit": "%", "value": 20.0},
+          "time_avg": {"type": "max", "unit": "s", "value": 60.0},
+      }
+
+      all_ok = True
+      validate_res = {}
+
+      for metric, limit in limits.items():
+          res = results[metric]
+          ok = True
+
+          if (
+              limit["type"] == "max" and res > limit["value"]
+              or limit["type"] == "min" and res < limit["value"]
+          ):
+              ok = False
+              all_ok = False
+
+          validate_res[metric] = {
+              "limit": f"{round(limit['value'], 2)}{limit['unit']} ({limit['type']})",
+              "value": f"{round(res, 2)}{limit['unit']}",
+              "status": "pass" if ok else "fail",
+          }
+
+      return (all_ok, json.dumps(validate_res))

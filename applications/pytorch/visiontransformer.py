@@ -4,7 +4,7 @@ import torchvision.transforms as transforms
 from torchvision.models import vit_b_16
 import sys
 import os
-from datetime import datetime
+import time
 
 from hdf5_dataset import HDF5Dataset
 
@@ -29,7 +29,7 @@ def train_model(model, criterion, optimizer, train_loader, val_loader, epochs=10
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model.to(device)
     for epoch in range(epochs):
-        epoch_start = datetime.now()
+        epoch_start = time.time()
         print(f"Starting epoch {epoch+1}.")
         model.train()
         running_loss = 0.0
@@ -54,7 +54,7 @@ def train_model(model, criterion, optimizer, train_loader, val_loader, epochs=10
                 total += labels.size(0)
                 correct += (predicted == labels).sum().item()
         print(f"Accuracy: {100 * correct / total}%")
-        print(f"Epoch time: {str(datetime.now() - epoch_start).split('.')[0]}")
+        print(f"Time: {round(time.time() - epoch_start, 2)}s")
 
 
 with HDF5Dataset(

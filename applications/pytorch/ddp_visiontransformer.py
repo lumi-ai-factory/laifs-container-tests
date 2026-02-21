@@ -9,7 +9,6 @@ from torch.nn.parallel import DistributedDataParallel
 import torch.distributed as dist
 from torch.utils.data.distributed import DistributedSampler
 import sys
-from datetime import datetime
 
 from hdf5_dataset import HDF5Dataset
 
@@ -70,7 +69,7 @@ def train_model(model, criterion, optimizer, train_loader, val_loader, epochs=10
         start = time.time()
 
     for epoch in range(epochs):
-        epoch_start = datetime.now()
+        epoch_start = time.time()
         model.train()
         running_loss = 0.0
         for images, labels in train_loader:
@@ -101,7 +100,7 @@ def train_model(model, criterion, optimizer, train_loader, val_loader, epochs=10
 
         if rank == 0:
             print(f"Accuracy: {100 * correct / total}%")
-            print(f"Epoch time: {str(datetime.now() - epoch_start).split('.')[0]}")
+            print(f"Time: {round(time.time() - epoch_start, 2)}s")
 
     if rank == 0:
         print(f"Time elapsed (s): {time.time()-start}")
