@@ -32,20 +32,14 @@ each application directory. The `source.json` file contains permalinks to all fi
 an external source, while any changes made to those files can be viewed in the `diff.txt` file.
 
 - `applications/bitsandbytes`
-    - Source:
-        - [bitsandbytes-foundation/bitsandbytes](https://github.com/bitsandbytes-foundation/bitsandbytes)
-    - License:
-        - [MIT License](https://github.com/bitsandbytes-foundation/bitsandbytes/blob/main/LICENSE)
+    - Source: [bitsandbytes-foundation/bitsandbytes](https://github.com/bitsandbytes-foundation/bitsandbytes)
+    - License: [MIT License](https://github.com/bitsandbytes-foundation/bitsandbytes/blob/main/LICENSE)
 - `applications/pytorch`
-    - Source: 
-        - [Lumi-supercomputer/LUMI-AI-Guide](https://github.com/Lumi-supercomputer/LUMI-AI-Guide)
-    - License:
-        - [Attribution 4.0 International](https://github.com/Lumi-supercomputer/LUMI-AI-Guide/blob/main/LICENSE)
+    - Source: [Lumi-supercomputer/LUMI-AI-Guide](https://github.com/Lumi-supercomputer/LUMI-AI-Guide)
+    - License: [Attribution 4.0 International](https://github.com/Lumi-supercomputer/LUMI-AI-Guide/blob/main/LICENSE)
 - `applications/transformers`
-    - Source:
-        - [huggingface/transformers](https://github.com/huggingface/transformers/tree/main)
-    - License:
-        - [Apache License 2.0](https://github.com/huggingface/transformers/blob/main/LICENSE)
+    - Source: [huggingface/transformers](https://github.com/huggingface/transformers/tree/main)
+    - License: [Apache License 2.0](https://github.com/huggingface/transformers/blob/main/LICENSE)
 
 ---
 
