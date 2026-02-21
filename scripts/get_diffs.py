@@ -3,7 +3,6 @@
 import difflib
 import json
 from pathlib import Path
-import re
 import urllib.request
 
 
@@ -35,21 +34,7 @@ def main():
             )
 
             with open(appdir / "diff.txt", "a") as f:
-                for i, line in enumerate(lines_diff):
-                    if i < 2:
-                        # Filenames in bold
-                        line = re.sub(r"(.*)", "\033[1m" + r"\1" + "\033[0m", line)
-                    else:
-                        # Context in cyan
-                        line = re.sub(
-                            r"^(@@\s-\d+,\d+\s\+\d+,\d+\s@@)", "\033[36m" + r"\1" + "\033[0m", line
-                        )
-                        # Old in red
-                        line = re.sub(r"^(-.*)$", "\033[31m" + r"\1" + "\033[0m", line)
-                        # New in green
-                        line = re.sub(r"^(\+.*)$", "\033[32m" + r"\1" + "\033[0m", line)
-
-                    f.write(line)
+                f.writelines(lines_diff)
 
 
 if __name__ == "__main__":

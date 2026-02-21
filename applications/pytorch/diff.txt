@@ -1,104 +1,104 @@
-[1m--- https://raw.githubusercontent.com/Lumi-supercomputer/LUMI-AI-Guide/6bc200c40cb1fc4220985b9500b45fe5c5b74c35/5-multi-gpu-and-node/ddp_visiontransformer.py[0m
-[1m[0m[1m+++ ddp_visiontransformer.py[0m
-[1m[0m[36m@@ -9,9 +9,9 @@[0m
+--- https://raw.githubusercontent.com/Lumi-supercomputer/LUMI-AI-Guide/6bc200c40cb1fc4220985b9500b45fe5c5b74c35/5-multi-gpu-and-node/ddp_visiontransformer.py
++++ ddp_visiontransformer.py
+@@ -9,9 +9,9 @@
  import torch.distributed as dist
  from torch.utils.data.distributed import DistributedSampler
  import sys
-[32m+from datetime import datetime[0m
++from datetime import datetime
  
-[31m-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))[0m
-[31m-from resources.hdf5_dataset import HDF5Dataset[0m
-[32m+from hdf5_dataset import HDF5Dataset[0m
+-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+-from resources.hdf5_dataset import HDF5Dataset
++from hdf5_dataset import HDF5Dataset
  
  
  # The performance of the CPU mapping needs to be tested
-[36m@@ -70,6 +70,7 @@[0m
+@@ -70,6 +70,7 @@
          start = time.time()
  
      for epoch in range(epochs):
-[32m+        epoch_start = datetime.now()[0m
++        epoch_start = datetime.now()
          model.train()
          running_loss = 0.0
          for images, labels in train_loader:
-[36m@@ -100,14 +101,19 @@[0m
+@@ -100,14 +101,19 @@
  
          if rank == 0:
              print(f"Accuracy: {100 * correct / total}%")
-[32m+            print(f"Epoch time: {str(datetime.now() - epoch_start).split('.')[0]}")[0m
++            print(f"Epoch time: {str(datetime.now() - epoch_start).split('.')[0]}")
  
      if rank == 0:
          print(f"Time elapsed (s): {time.time()-start}")
  
  
  with HDF5Dataset(
-[31m-    "../resources/train_images.hdf5", transform=transform[0m
-[32m+    f"{os.environ['DATADIR']}/pytorch/train_images.hdf5", transform=transform[0m
+-    "../resources/train_images.hdf5", transform=transform
++    f"{os.environ['DATADIR']}/pytorch/train_images.hdf5", transform=transform
  ) as full_train_dataset:
-[32m+    # Subset the dataset for benchmarking[0m
-[32m+    full_train_dataset = torch.utils.data.Subset([0m
-[32m+        full_train_dataset, range(0, int(0.1 * len(full_train_dataset)))[0m
-[32m+    )[0m
++    # Subset the dataset for benchmarking
++    full_train_dataset = torch.utils.data.Subset(
++        full_train_dataset, range(0, int(0.1 * len(full_train_dataset)))
++    )
  
      # Splitting the dataset into train and validation sets
      train_size = int(0.8 * len(full_train_dataset))
-[36m@@ -126,8 +132,8 @@[0m
+@@ -126,8 +132,8 @@
          val_dataset, sampler=val_sampler, batch_size=32, num_workers=7
      )
  
-[31m-    train_model(model, criterion, optimizer, train_loader, val_loader)[0m
-[32m+    train_model(model, criterion, optimizer, train_loader, val_loader, epochs=5)[0m
+-    train_model(model, criterion, optimizer, train_loader, val_loader)
++    train_model(model, criterion, optimizer, train_loader, val_loader, epochs=5)
  
      dist.destroy_process_group()
  
-[31m-torch.save(model.state_dict(), "vit_b_16_imagenet.pth")[0m
-[32m+torch.save(model.state_dict(), f"{os.environ['DATADIR']}/pytorch/vit_b_16_imagenet.pth")[0m
-[1m--- https://raw.githubusercontent.com/Lumi-supercomputer/LUMI-AI-Guide/6bc200c40cb1fc4220985b9500b45fe5c5b74c35/1-quickstart/visiontransformer.py[0m
-[1m[0m[1m+++ visiontransformer.py[0m
-[1m[0m[36m@@ -4,9 +4,9 @@[0m
+-torch.save(model.state_dict(), "vit_b_16_imagenet.pth")
++torch.save(model.state_dict(), f"{os.environ['DATADIR']}/pytorch/vit_b_16_imagenet.pth")
+--- https://raw.githubusercontent.com/Lumi-supercomputer/LUMI-AI-Guide/6bc200c40cb1fc4220985b9500b45fe5c5b74c35/1-quickstart/visiontransformer.py
++++ visiontransformer.py
+@@ -4,9 +4,9 @@
  from torchvision.models import vit_b_16
  import sys
  import os
-[32m+from datetime import datetime[0m
++from datetime import datetime
  
-[31m-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))[0m
-[31m-from resources.hdf5_dataset import HDF5Dataset[0m
-[32m+from hdf5_dataset import HDF5Dataset[0m
+-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+-from resources.hdf5_dataset import HDF5Dataset
++from hdf5_dataset import HDF5Dataset
  
  # Define transformations for dataset
  transform = transforms.Compose(
-[36m@@ -29,6 +29,7 @@[0m
+@@ -29,6 +29,7 @@
      device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
      model.to(device)
      for epoch in range(epochs):
-[32m+        epoch_start = datetime.now()[0m
++        epoch_start = datetime.now()
          print(f"Starting epoch {epoch+1}.")
          model.train()
          running_loss = 0.0
-[36m@@ -53,11 +54,17 @@[0m
+@@ -53,11 +54,17 @@
                  total += labels.size(0)
                  correct += (predicted == labels).sum().item()
          print(f"Accuracy: {100 * correct / total}%")
-[32m+        print(f"Epoch time: {str(datetime.now() - epoch_start).split('.')[0]}")[0m
++        print(f"Epoch time: {str(datetime.now() - epoch_start).split('.')[0]}")
  
  
  with HDF5Dataset(
-[31m-    "../resources/train_images.hdf5", transform=transform[0m
-[32m+    f"{os.environ['DATADIR']}/pytorch/train_images.hdf5", transform=transform[0m
+-    "../resources/train_images.hdf5", transform=transform
++    f"{os.environ['DATADIR']}/pytorch/train_images.hdf5", transform=transform
  ) as full_train_dataset:
-[32m+    # Subset the dataset for benchmarking[0m
-[32m+    full_train_dataset = torch.utils.data.Subset([0m
-[32m+        full_train_dataset, range(0, int(0.1 * len(full_train_dataset)))[0m
-[32m+    )[0m
-[32m+[0m
++    # Subset the dataset for benchmarking
++    full_train_dataset = torch.utils.data.Subset(
++        full_train_dataset, range(0, int(0.1 * len(full_train_dataset)))
++    )
++
      # Splitting the dataset into train and validation sets
      train_size = int(0.8 * len(full_train_dataset))
      val_size = len(full_train_dataset) - train_size
-[36m@@ -66,6 +73,6 @@[0m
+@@ -66,6 +73,6 @@
      )
      train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True, num_workers=7)
      val_loader = DataLoader(val_dataset, batch_size=32, shuffle=True, num_workers=7)
-[31m-    train_model(model, criterion, optimizer, train_loader, val_loader)[0m
-[32m+    train_model(model, criterion, optimizer, train_loader, val_loader, epochs=5)[0m
+-    train_model(model, criterion, optimizer, train_loader, val_loader)
++    train_model(model, criterion, optimizer, train_loader, val_loader, epochs=5)
  
-[31m-torch.save(model.state_dict(), "vit_b_16_imagenet.pth")[0m
-[32m+torch.save(model.state_dict(), f"{os.environ['DATADIR']}/pytorch/vit_b_16_imagenet.pth")[0m
+-torch.save(model.state_dict(), "vit_b_16_imagenet.pth")
++torch.save(model.state_dict(), f"{os.environ['DATADIR']}/pytorch/vit_b_16_imagenet.pth")

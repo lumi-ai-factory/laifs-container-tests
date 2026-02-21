@@ -1,30 +1,30 @@
-[1m--- https://raw.githubusercontent.com/bitsandbytes-foundation/bitsandbytes/eb3064f952988b041289a039fc1ac140b8c09148/benchmarking/inference_benchmark.py[0m
-[1m[0m[1m+++ inference_benchmark.py[0m
-[1m[0m[36m@@ -32,6 +32,13 @@[0m
+--- https://raw.githubusercontent.com/bitsandbytes-foundation/bitsandbytes/eb3064f952988b041289a039fc1ac140b8c09148/benchmarking/inference_benchmark.py
++++ inference_benchmark.py
+@@ -32,6 +32,13 @@
  from optimum_benchmark import Benchmark, BenchmarkConfig, InferenceConfig, ProcessConfig, PyTorchConfig
  from optimum_benchmark.logging_utils import setup_logging
  import torch
-[32m+[0m
-[32m+# Avoid flooding the log with warnings logged by `optimum_benchmark.trackers.memory`.[0m
-[32m+# There is a comment in another file that says "these functions fail a lot for no apparent reason".[0m
-[32m+#[0m
-[32m+# https://github.com/huggingface/optimum-benchmark/blob/b263af4/optimum_benchmark/launchers/device_isolation_utils.py#L81C13-L81C64[0m
-[32m+#[0m
-[32m+setup_logging(level="ERROR")[0m
++
++# Avoid flooding the log with warnings logged by `optimum_benchmark.trackers.memory`.
++# There is a comment in another file that says "these functions fail a lot for no apparent reason".
++#
++# https://github.com/huggingface/optimum-benchmark/blob/b263af4/optimum_benchmark/launchers/device_isolation_utils.py#L81C13-L81C64
++#
++setup_logging(level="ERROR")
  
  torch.backends.cudnn.benchmark = False
  torch.backends.cudnn.deterministic = True
-[36m@@ -162,9 +169,12 @@[0m
+@@ -162,9 +169,12 @@
      benchmark_report = Benchmark.launch(benchmark_config)
      benchmark_report.save_json(out_path)
  
-[32m+    # The Unframe runner parses results from stdout[0m
-[32m+    import json[0m
-[32m+    print(json.dumps(benchmark_report.to_dict()))[0m
-[32m+[0m
++    # The Unframe runner parses results from stdout
++    import json
++    print(json.dumps(benchmark_report.to_dict()))
++
  
  if __name__ == "__main__":
-[31m-    setup_logging(level="INFO")[0m
+-    setup_logging(level="INFO")
      args = parse_args()
  
      out_dir = Path(args.out_dir)
