@@ -3,6 +3,7 @@
 import difflib
 import json
 from pathlib import Path
+import re
 import urllib.request
 
 
@@ -17,8 +18,9 @@ def main():
         with open(matches[0]) as f:
             sources = json.load(f)
 
-        with open(appdir / "changes.txt", "w") as f:
-            f.write(60 * "#" + "\n")
+        with open(appdir / "diff.txt", "w"):
+            # Erase file contents
+            pass
 
         for local, remote in sources.items():
             with open(appdir / local) as f:
@@ -26,16 +28,28 @@ def main():
             with urllib.request.urlopen(remote) as f:
                 lines_remote = f.read().decode("utf-8").splitlines(keepends=True)
 
-            difference = list(
+            lines_diff = list(
                 difflib.unified_diff(
                     lines_remote, lines_local, fromfile=remote, tofile=local
                 )
             )
-            if not difference:
-                difference = [f"--- {remote}\n", f"+++ {local}\n"]
 
-            with open(appdir / "changes.txt", "a") as f:
-                f.writelines(difference + [60 * "#" + "\n"])
+            with open(appdir / "diff.txt", "a") as f:
+                for i, line in enumerate(lines_diff):
+                    if i < 2:
+                        # Filenames in bold
+                        line = re.sub(r"(.*)", "\033[1m" + r"\1" + "\033[0m", line)
+                    else:
+                        # Context in cyan
+                        line = re.sub(
+                            r"^(@@\s-\d+,\d+\s\+\d+,\d+\s@@)", "\033[36m" + r"\1" + "\033[0m", line
+                        )
+                        # Old in red
+                        line = re.sub(r"^(-.*)$", "\033[31m" + r"\1" + "\033[0m", line)
+                        # New in green
+                        line = re.sub(r"^(\+.*)$", "\033[32m" + r"\1" + "\033[0m", line)
+
+                    f.write(line)
 
 
 if __name__ == "__main__":

@@ -11,12 +11,13 @@ This repository provides a set of tests for benchmarking container images built 
 
 **This repository contains:**
 
-- **Definition files** for running tests with the [Unframe test runner](github.com/viahlgre/unframe).
+- **Definition files** for running tests on the LUMI supercomputer using the
+  [Unframe test runner](https://github.com/viahlgre/unframe) (WIP).
 - **Configuration files** for specifying additional parameters for tests.
-- **Application benchmarks** representative of typical usage:
+- **Application benchmarks** representative of typical usage. Each application directory contains:
     - **Benchmark files** for running deep learning workloads.
-    - **Source files** listing the origins of the benchmark files.
-    - **Change logs** listing any local changes made to the benchmark files.
+    - A **source file** listing the origins of the benchmark files.
+    - A **diff file** providing a Git-style summary of any local changes to the benchmark files.
 
 ---
 
@@ -24,12 +25,16 @@ This repository provides a set of tests for benchmarking container images built 
 
 ### Configuring job parameters
 
-Passing certain arguments to the Unframe runner, such as the desired Slurm partition and path to
-the image file, is done using JSON configuration files, which are stored in the `config` directory.
-When testing a container image, you should start by writing a configuration file for it. This
-repository includes a configuration file for running the
+Passing certain arguments to the Unframe runner, such as the Slurm accounting identifier and path
+to the image file, is done using JSON configuration files stored in the `config` directory.  When
+testing a container image, you should start by writing a configuration file for it. This repository
+includes a configuration file for running the
 `lumi-multitorch-full-u24r64f21m43t29-20260216_093549` image on LUMI, which can be adapted for
 other images and systems.
+
+> [!NOTE]
+> When using the configuration files provided in this repository, change the `account` parameter to
+> your LUMI project identifier.
 
 ### Setting up environment
 
