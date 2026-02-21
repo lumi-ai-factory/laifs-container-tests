@@ -92,9 +92,9 @@ unframe --dir definitions \
     --extra-args-file config/lumi-multitorch-full-u24r64f21m43t29-20260216_093549.json
 ```
 
-Run test(s) with the name `transformers-inference-sdpa`:
+Run test(s) with the name `transformers_inference_sdpa`:
 ```bash
-unframe --dir definitions --name transformers-inference-sdpa \
+unframe --dir definitions --name transformers_inference_sdpa \
     --extra-args-file config/lumi-multitorch-full-u24r64f21m43t29-20260216_093549.json
 ```
 

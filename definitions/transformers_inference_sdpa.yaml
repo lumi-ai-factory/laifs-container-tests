@@ -1,4 +1,4 @@
-name: transformers-inference-sdpa
+name: transformers_inference_sdpa
 tags: [transformers, inference]
 description: Transformers inference with scaled dot-product attention
 
@@ -64,13 +64,13 @@ validate: |
       import json
 
       if not results:
-          return (False, "Failed to parse results")
+          return (False, "no results to validate")
 
       limits = {
-          "e2e_latency": {"type": "max", "unit": "s", "value": 10},
-          "time_to_first_token": {"type": "max", "unit": "ms", "value": 500},
-          "inter_token_latency": {"type": "max", "unit": "ms", "value": 50},
-          "throughput": {"type": "min", "unit": "tok/s", "value": 200},
+          "e2e_latency": {"type": "max", "unit": "s", "value": 10.0},
+          "time_to_first_token": {"type": "max", "unit": "ms", "value": 500.0},
+          "inter_token_latency": {"type": "max", "unit": "ms", "value": 50.0},
+          "throughput": {"type": "min", "unit": "tok/s", "value": 200.0},
       }
 
       all_ok = True
@@ -88,8 +88,8 @@ validate: |
               all_ok = False
 
           validate_res[metric] = {
-              "limit": f"{limit['value']} {limit['unit']} ({limit['type']})",
-              "value": f"{res['value']} {res['unit']}",
+              "limit": f"{round(limit['value'], 2)}{limit['unit']} ({limit['type']})",
+              "value": f"{round(res['value'], 2)}{res['unit']}",
               "status": "pass" if ok else "fail",
           }
 

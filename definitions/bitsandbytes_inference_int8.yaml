@@ -1,4 +1,4 @@
-name: bitsandbytes-inference-int8
+name: bitsandbytes_inference_int8
 tags: [bitsandbytes, inference]
 description: BitsAndBytes inference with INT8 quantization
 
@@ -38,44 +38,49 @@ snippets:
 parse: |
   def parse(text, params):
       import json
-      for line in text.splitlines():
+
+      data = None
+      for line in text.splitlines()[::-1]:
           try:
               data = json.loads(line)
-              return {
-                  "load_model_latency": {
-                      "value": data["load_model"]["latency"]["mean"],
-                      "unit": data["load_model"]["latency"]["unit"],
-                  },
-                  "generate_throughput": {
-                      "value": data["generate"]["throughput"]["value"],
-                      "unit": data["generate"]["throughput"]["unit"],
-                  },
-                  "prefill_throughput": {
-                      "value": data["prefill"]["throughput"]["value"],
-                      "unit": data["prefill"]["throughput"]["unit"],
-                  },
-                  "decode_throughput": {
-                      "value": data["decode"]["throughput"]["value"],
-                      "unit": data["decode"]["throughput"]["unit"],
-                  },
-                  "per_token_latency": {
-                      "value": data["per_token"]["latency"]["mean"],
-                      "unit": data["per_token"]["latency"]["unit"],
-                  },
-              }
+              break
           except:
               continue
+
+      if data:
+          return {
+              "load_model_latency": {
+                  "value": data["load_model"]["latency"]["mean"],
+                  "unit": data["load_model"]["latency"]["unit"],
+              },
+              "generate_throughput": {
+                  "value": data["generate"]["throughput"]["value"],
+                  "unit": data["generate"]["throughput"]["unit"],
+              },
+              "prefill_throughput": {
+                  "value": data["prefill"]["throughput"]["value"],
+                  "unit": data["prefill"]["throughput"]["unit"],
+              },
+              "decode_throughput": {
+                  "value": data["decode"]["throughput"]["value"],
+                  "unit": data["decode"]["throughput"]["unit"],
+              },
+              "per_token_latency": {
+                  "value": data["per_token"]["latency"]["mean"],
+                  "unit": data["per_token"]["latency"]["unit"],
+              },
+          }
 
 validate: |
   def validate(results, params):
       import json
 
       if not results:
-          return (False, "Failed to parse results")
+          return (False, "no results to validate")
 
       limits = {
-          "load_model_latency": {"type": "max", "unit": "s", "value": 60},
-          "generate_throughput": {"type": "min", "unit": "samples/s", "value": 50},
+          "load_model_latency": {"type": "max", "unit": "s", "value": 60.0},
+          "generate_throughput": {"type": "min", "unit": "samples/s", "value": 50.0},
           "prefill_throughput": {"type": "min", "unit": "samples/s", "value": 2.5},
           "decode_throughput": {"type": "min", "unit": "samples/s", "value": 75},
           "per_token_latency": {"type": "max", "unit": "s", "value": 1.0},
@@ -96,8 +101,8 @@ validate: |
               all_ok = False
 
           validate_res[metric] = {
-              "limit": f"{limit['value']} {limit['unit']} ({limit['type']})",
-              "value": f"{res['value']} {res['unit']}",
+              "limit": f"{round(limit['value'], 2)}{limit['unit']} ({limit['type']})",
+              "value": f"{round(res['value'], 2)}{res['unit']}",
               "status": "pass" if ok else "fail",
           }
 
