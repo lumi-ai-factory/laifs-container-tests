@@ -4,6 +4,8 @@
 
 This repository provides a set of tests for benchmarking container images built using the
 [LUMI AI Factory container recipes](https://github.com/lumi-ai-factory/laifs-container-recipes).
+The included tests are intended to ensure that the container images perform well for running
+typical deep learning workloads.
 
 ---
 
@@ -14,19 +16,45 @@ This repository provides a set of tests for benchmarking container images built 
 - **Definition files** for running tests on the LUMI supercomputer using the
   [Unframe test runner](https://github.com/viahlgre/unframe) (WIP).
 - **Configuration files** for specifying additional parameters for tests.
-- **Application benchmarks** representative of typical usage. Each application directory contains:
+- **Application benchmarks** representative of each application's typical usage:
     - **Benchmark files** for running deep learning workloads.
-    - A **source file** listing the origins of the benchmark files.
-    - A **diff file** providing a Git-style summary of any local changes to the benchmark files.
+    - **Source files** listing the origins of all benchmark files obtained from external sources.
+    - **Diff files** providing a Git-style summary of any local changes to external benchmark
+      files.
+
+---
+
+## Benchmarks
+
+This section lists the currently available application benchmarks as well as their sources and
+licenses. For more detailed information, see the `source.json` and `diff.txt` files included in
+each application directory. The `source.json` file contains permalinks to all files obtained from
+an external source, while any changes made to those files can be viewed in the `diff.txt` file.
+
+- `applications/bitsandbytes`
+    - Source:
+        - [bitsandbytes-foundation/bitsandbytes](https://github.com/bitsandbytes-foundation/bitsandbytes)
+    - License:
+        - [MIT License](https://github.com/bitsandbytes-foundation/bitsandbytes/blob/main/LICENSE)
+- `applications/pytorch`
+    - Source: 
+        - [Lumi-supercomputer/LUMI-AI-Guide](https://github.com/Lumi-supercomputer/LUMI-AI-Guide)
+    - License:
+        - [Attribution 4.0 International](https://github.com/Lumi-supercomputer/LUMI-AI-Guide/blob/main/LICENSE)
+- `applications/transformers`
+    - Source:
+        - [huggingface/transformers](https://github.com/huggingface/transformers/tree/main)
+    - License:
+        - [Apache License 2.0](https://github.com/huggingface/transformers/blob/main/LICENSE)
 
 ---
 
 ## Usage
 
-### Configuring job parameters
+### Configuring test jobs
 
-Passing certain arguments to the Unframe runner, such as the Slurm accounting identifier and path
-to the image file, is done using JSON configuration files stored in the `config` directory.  When
+Certain test parameters, such as the Slurm accounting identifier and path to the image file, are
+passed to the Unframe runner using JSON configuration files stored in the `config` directory.  When
 testing a container image, you should start by writing a configuration file for it. This repository
 includes a configuration file for running the
 `lumi-multitorch-full-u24r64f21m43t29-20260216_093549` image on LUMI, which can be adapted for
@@ -58,9 +86,10 @@ bash scripts/setup.sh config/lumi-multitorch-full-u24r64f21m43t29-20260216_09354
 
 Tests are run using the Unframe test runner. Unframe accepts one or more definition files that
 can be used to specify Slurm resource allocations, commands to run, as well as functions to parse
-and validate the obtained results. After following the steps in the previous section, Unframe
-should be installed in a virtual environment located under the `.virtualenvs` directory. Activate
-the virtual environment to add Unframe to your `PATH`.
+and validate the obtained results. After following the steps in the
+[previous section](#setting-up-environment), Unframe should be installed in a virtual environment
+located under the `.virtualenvs` directory. Activate the virtual environment to add Unframe to your
+`PATH`.
 
 ```bash
 source .virtualenvs/runner/bin/activate
@@ -122,5 +151,6 @@ We welcome contributions! Please open an
 
 ## License
 
-This project is licensed under the [MIT License](LICENSE).
+This project is licensed under the [MIT License](LICENSE). For the licensing information of
+external sources used in the projcet, please see the [Benchmarks section](#benchmarks).
 
