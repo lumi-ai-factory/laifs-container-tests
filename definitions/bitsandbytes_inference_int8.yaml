@@ -25,13 +25,12 @@ snippets:
       export HF_HOME=$PWD/data/huggingface
 
       cd benchmarks/bitsandbytes
-
       python3 inference_benchmark.py \
-        LumiOpen/Llama-Poro-2-8B-base \
-        --configs int8 \
-        --batches=8 \
-        --iterations=1 \
-        --warmup-runs=0 \
+          mistralai/Ministral-3-8B-Base-2512 \
+          --configs int8 \
+          --batches=8 \
+          --iterations=1 \
+          --warmup-runs=0 \
 
 parse: |
   def parse(text, params):
