@@ -106,9 +106,7 @@ def train_model(model, criterion, optimizer, train_loader, val_loader, epochs=10
         print(f"Time elapsed (s): {time.time()-start}")
 
 
-with HDF5Dataset(
-    f"{os.environ['DATADIR']}/pytorch/train_images.hdf5", transform=transform
-) as full_train_dataset:
+with HDF5Dataset("train_images.hdf5", transform=transform) as full_train_dataset:
     # Subset the dataset for benchmarking
     full_train_dataset = torch.utils.data.Subset(
         full_train_dataset, range(0, int(0.1 * len(full_train_dataset)))
@@ -135,4 +133,4 @@ with HDF5Dataset(
 
     dist.destroy_process_group()
 
-torch.save(model.state_dict(), f"{os.environ['DATADIR']}/pytorch/vit_b_16_imagenet.pth")
+torch.save(model.state_dict(), "vit_b_16_imagenet.pth")

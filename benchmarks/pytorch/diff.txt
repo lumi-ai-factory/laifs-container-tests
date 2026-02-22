@@ -18,7 +18,7 @@
          model.train()
          running_loss = 0.0
          for images, labels in train_loader:
-@@ -100,14 +100,19 @@
+@@ -100,14 +100,17 @@
  
          if rank == 0:
              print(f"Accuracy: {100 * correct / total}%")
@@ -28,10 +28,10 @@
          print(f"Time elapsed (s): {time.time()-start}")
  
  
- with HDF5Dataset(
+-with HDF5Dataset(
 -    "../resources/train_images.hdf5", transform=transform
-+    f"{os.environ['DATADIR']}/pytorch/train_images.hdf5", transform=transform
- ) as full_train_dataset:
+-) as full_train_dataset:
++with HDF5Dataset("train_images.hdf5", transform=transform) as full_train_dataset:
 +    # Subset the dataset for benchmarking
 +    full_train_dataset = torch.utils.data.Subset(
 +        full_train_dataset, range(0, int(0.1 * len(full_train_dataset)))
@@ -39,7 +39,7 @@
  
      # Splitting the dataset into train and validation sets
      train_size = int(0.8 * len(full_train_dataset))
-@@ -126,8 +131,8 @@
+@@ -126,7 +129,7 @@
          val_dataset, sampler=val_sampler, batch_size=32, num_workers=7
      )
  
@@ -48,8 +48,6 @@
  
      dist.destroy_process_group()
  
--torch.save(model.state_dict(), "vit_b_16_imagenet.pth")
-+torch.save(model.state_dict(), f"{os.environ['DATADIR']}/pytorch/vit_b_16_imagenet.pth")
 --- https://raw.githubusercontent.com/Lumi-supercomputer/LUMI-AI-Guide/6bc200c40cb1fc4220985b9500b45fe5c5b74c35/1-quickstart/visiontransformer.py
 +++ visiontransformer.py
 @@ -4,9 +4,9 @@
@@ -72,17 +70,17 @@
          print(f"Starting epoch {epoch+1}.")
          model.train()
          running_loss = 0.0
-@@ -53,11 +54,17 @@
+@@ -53,11 +54,15 @@
                  total += labels.size(0)
                  correct += (predicted == labels).sum().item()
          print(f"Accuracy: {100 * correct / total}%")
 +        print(f"Time: {round(time.time() - epoch_start, 2)}s")
  
  
- with HDF5Dataset(
+-with HDF5Dataset(
 -    "../resources/train_images.hdf5", transform=transform
-+    f"{os.environ['DATADIR']}/pytorch/train_images.hdf5", transform=transform
- ) as full_train_dataset:
+-) as full_train_dataset:
++with HDF5Dataset("train_images.hdf5", transform=transform) as full_train_dataset:
 +    # Subset the dataset for benchmarking
 +    full_train_dataset = torch.utils.data.Subset(
 +        full_train_dataset, range(0, int(0.1 * len(full_train_dataset)))
@@ -91,12 +89,11 @@
      # Splitting the dataset into train and validation sets
      train_size = int(0.8 * len(full_train_dataset))
      val_size = len(full_train_dataset) - train_size
-@@ -66,6 +73,6 @@
+@@ -66,6 +71,6 @@
      )
      train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True, num_workers=7)
      val_loader = DataLoader(val_dataset, batch_size=32, shuffle=True, num_workers=7)
 -    train_model(model, criterion, optimizer, train_loader, val_loader)
 +    train_model(model, criterion, optimizer, train_loader, val_loader, epochs=5)
  
--torch.save(model.state_dict(), "vit_b_16_imagenet.pth")
-+torch.save(model.state_dict(), f"{os.environ['DATADIR']}/pytorch/vit_b_16_imagenet.pth")
+ torch.save(model.state_dict(), "vit_b_16_imagenet.pth")

@@ -87,22 +87,21 @@ Setting up using a specific extra args file
 bash scripts/setup_env.sh extra-args/lumi-multitorch-full-u24r64f21m43t29-20260216_093549.json
 ```
 
-### Getting test data
+### Obtaining non-public data
 
-The following list indicates the data files required by each benchmark. These are expected to be
-stored in benchmark-specific subdirectories in a directory named `data`, e.g, `data/pytorch`. This
-is also the location where benchmark outputs should be written to. Some of the data files are
-available system-wide on LUMI. If you are working on LUMI, you can run `scripts/get_data_lumi.sh`
-to copy these files to the correct locations under `data`. Otherwise, you will need to do this
-manually.
+This section lists any non-public models and datasets required by benchmarks. Some of these files
+might be available system-wide on LUMI, so if you are running the benchmarks on LUMI, you can run
+`scripts/get_data_lumi.sh` to copy these files to the respective benchmark directories. Otherwise,
+you will need to do this manually. Models and datasets used by more than one benchmark should be
+stored under a directory named `data` at the top of the directory tree of this repository.
 
 - `benchmarks/pytorch`
     - [Tiny ImageNet](https://www.kaggle.com/c/tiny-imagenet) dataset
-        - This dataset is already available on LUMI in HDF5 format and is copied under
-          `data/pytorch` by running `scripts/get_data_lumi.sh`. On other systems, you need to
-          download and convert it to HDF5 yourself. The
+        - This dataset is already available on LUMI in HDF5 format and can be copied into the
+          benchmark directory by running `scripts/get_data_lumi.sh`. On other systems, you need to
+          download and convert the dataset to HDF5 yourself. The
           [LUMI AI guide](https://github.com/Lumi-supercomputer/LUMI-AI-Guide) provides
-          [instructions for this](https://github.com/Lumi-supercomputer/LUMI-AI-Guide/tree/870ca3bd4ae4c7df818f5eca4af9d251b0194ec9/3-file-formats#hdf5).
+          [instructions for doing this](https://github.com/Lumi-supercomputer/LUMI-AI-Guide/tree/870ca3bd4ae4c7df818f5eca4af9d251b0194ec9/3-file-formats#hdf5).
         - Please have a look at the terms of access for the ImageNet dataset
           [here](https://www.image-net.org/download.php).
 

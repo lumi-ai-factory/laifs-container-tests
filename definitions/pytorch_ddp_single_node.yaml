@@ -23,7 +23,6 @@ snippets:
     content: |
       source .virtualenvs/$(basename $SINGULARITY_NAME .sif)/bin/activate                                
 
-      export DATADIR=$PWD/data
       # torchrun sets this if not already set, here we avoid the warning message
       export OMP_NUM_THREADS=1
 

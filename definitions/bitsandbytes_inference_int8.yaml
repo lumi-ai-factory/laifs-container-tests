@@ -22,8 +22,7 @@ snippets:
     content: |
       source .virtualenvs/$(basename $SINGULARITY_NAME .sif)/bin/activate
 
-      export DATADIR=$PWD/data
-      export HF_HOME=$DATADIR/huggingface
+      export HF_HOME=$PWD/data/huggingface
 
       cd benchmarks/bitsandbytes
 
@@ -31,7 +30,6 @@ snippets:
         LumiOpen/Llama-Poro-2-8B-base \
         --configs int8 \
         --batches=8 \
-        --out-dir=$DATADIR/bitsandbytes/reports \
         --iterations=1 \
         --warmup-runs=0 \
 

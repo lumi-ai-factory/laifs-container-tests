@@ -2,7 +2,4 @@
 /data/
 /out/
 
-# Optimum-Benchmark writes a log file for BitsAndBytes
-/benchmarks/bitsandbytes/benchmark.log
-
 __pycache__/

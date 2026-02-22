@@ -22,8 +22,6 @@ snippets:
     content: |
       source .virtualenvs/$(basename $SINGULARITY_NAME .sif)/bin/activate                                
 
-      export DATADIR=$PWD/data
-
       cd benchmarks/pytorch
       python3 visiontransformer.py
 
