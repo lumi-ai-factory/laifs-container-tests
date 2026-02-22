@@ -45,7 +45,7 @@ external source, while any changes made to those files can be viewed in the `dif
 
 Updating diff files
 ```bash
-bash scripts/get_diffs.txt
+python3 scripts/get_diffs.py
 ```
 
 Showing diff for a particular application
@@ -87,6 +87,15 @@ Setting up using a specific configuration file
 ```bash
 bash scripts/setup.sh config/lumi-multitorch-full-u24r64f21m43t29-20260216_093549.json
 ```
+
+#### Included data
+
+The setup script stores the following data into a directory named `data`.
+
+- [Tiny ImageNet dataset](https://www.kaggle.com/c/tiny-imagenet)
+    - Note: This dataset is already available on LUMI, but on other systems, you need to download
+      it yourself. Please have a look at the terms of access for the ImageNet dataset
+      [here](https://www.image-net.org/download.php).
 
 ### Running tests
 

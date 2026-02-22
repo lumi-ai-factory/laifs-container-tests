@@ -17,9 +17,12 @@ echo
 # Ensure required directories exist
 mkdir -p .virtualenvs data
 
-# Get training data for PyTorch tests
-if [ ! -f data/pytorch/train_images.hdf5 ]; then
-    cp /appl/local/training/LUMI-AI-Guide/tiny-imagenet-dataset.hdf5 data/train_images.hdf5
+# Get training data for PyTorch tests. This only works on LUMI, since the ImageNet dataset is
+# already available there.
+tiny_imagenet_dataset=/appl/local/training/LUMI-AI-Guide/tiny-imagenet-dataset.hdf5
+train_images=data/pytorch/train_images.hdf5
+if [ -f $tiny_imagenet_dataset ] && [ ! -f $train_images ]; then
+    cp $tiny_imagenet_dataset $train_images
 fi
 
 # Set up runner environment
