@@ -92,9 +92,12 @@ bash scripts/setup.sh config/lumi-multitorch-full-u24r64f21m43t29-20260216_09354
 
 The setup script stores the following data into a directory named `data`.
 
-- [Tiny ImageNet dataset](https://www.kaggle.com/c/tiny-imagenet)
-    - Note: This dataset is already available on LUMI, but on other systems, you need to download
-      it yourself. Please have a look at the terms of access for the ImageNet dataset
+- [Tiny ImageNet](https://www.kaggle.com/c/tiny-imagenet) dataset
+    - This dataset is already available on LUMI in HDF5 format. On other systems, you need to
+      download and convert it to HDF5 yourself. The
+      [LUMI AI guide](ttps://github.com/Lumi-supercomputer/LUMI-AI-Guide) provides
+      [instructions for this](https://github.com/Lumi-supercomputer/LUMI-AI-Guide/tree/870ca3bd4ae4c7df818f5eca4af9d251b0194ec9/3-file-formats#hdf5).
+    - Please have a look at the terms of access for the ImageNet dataset
       [here](https://www.image-net.org/download.php).
 
 ### Running tests
