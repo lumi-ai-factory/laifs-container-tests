@@ -27,9 +27,7 @@ typical deep learning workloads.
 ## Benchmarks
 
 This section lists the currently available application benchmarks as well as their sources and
-licenses. For more detailed information, see the `source.json` and `diff.txt` files included in
-each application directory. The `source.json` file contains permalinks to all files obtained from
-an external source, while any changes made to those files can be viewed in the `diff.txt` file.
+licenses.
 
 - `applications/bitsandbytes`
     - Source: [bitsandbytes-foundation/bitsandbytes](https://github.com/bitsandbytes-foundation/bitsandbytes)
@@ -40,6 +38,20 @@ an external source, while any changes made to those files can be viewed in the `
 - `applications/transformers`
     - Source: [huggingface/transformers](https://github.com/huggingface/transformers/tree/main)
     - License: [Apache License 2.0](https://github.com/huggingface/transformers/blob/main/LICENSE)
+
+For more detailed information, see the `source.json` and `diff.txt` files included in each
+application directory. The `source.json` file contains permalinks to all files obtained from an
+external source, while any changes made to those files can be viewed in the `diff.txt` file.
+
+Updating diff files
+```bash
+bash scripts/get_diffs.txt
+```
+
+Showing diff for a particular application
+```bash
+python3 scripts/show_color_diff.py applications/pytorch
+```
 
 ---
 
@@ -66,12 +78,12 @@ configuration file that is last in alphabetical order in the `config` directory.
 configuration files follow the naming scheme of LUMI AIF container image releases, this corresponds
 to the most recent release.
 
-Set up environment using the last configuration file in alphabetical order:
+Setting up using the last configuration file in alphabetical order
 ```bash
 bash scripts/setup.sh
 ```
 
-Set up environment using a specific configuration file:
+Setting up using a specific configuration file
 ```bash
 bash scripts/setup.sh config/lumi-multitorch-full-u24r64f21m43t29-20260216_093549.json
 ```
@@ -94,14 +106,14 @@ on LUMI. The main purpose of the module is bind mounting important directories s
 accessed inside the container. If you are working on LUMI, load this module. On other systems, you
 can, for example, use the `SINGULARITY_BIND` environment variable to bind the directories you need.
 
-Bind directories on LUMI:
+Binding directories on LUMI
 ```bash
 module purge
 module use /appl/local/laifs/modules
 module load lumi-aif-singularity-bindings
 ```
 
-Bind directories on other systems:
+Binding directories on other systems
 ```bash
 export SINGULARITY_BIND=<foo>,<bar>,  # replace with the desired directories
 ```
@@ -109,19 +121,19 @@ export SINGULARITY_BIND=<foo>,<bar>,  # replace with the desired directories
 Having completed the previous steps, you are ready to run the tests. Below are a few examples of
 how to use Unframe for this.
 
-Run all tests:
+Running all tests
 ```bash
 unframe --dir definitions \
     --extra-args-file config/lumi-multitorch-full-u24r64f21m43t29-20260216_093549.json
 ```
 
-Run test(s) with the name `transformers_inference_sdpa`:
+Running test(s) with the name `transformers_inference_sdpa`
 ```bash
 unframe --dir definitions --name transformers_inference_sdpa \
     --extra-args-file config/lumi-multitorch-full-u24r64f21m43t29-20260216_093549.json
 ```
 
-Run test(s) with the tag `transformers`:
+Running test(s) with the tag `transformers`
 ```bash
 unframe --dir definitions --tag transformers \
     --extra-args-file config/lumi-multitorch-full-u24r64f21m43t29-20260216_093549.json
