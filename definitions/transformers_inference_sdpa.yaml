@@ -27,7 +27,6 @@ snippets:
       cd benchmarks/transformers
 
       python3 run_benchmarks.py \
-          --output-dir=$DATADIR/transformers/benchmark_results \
           --model-id=LumiOpen/Llama-Poro-2-8B-base \
           --batch-size=8 \
           --sequence-length=128 \
