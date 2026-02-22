@@ -33,7 +33,7 @@ snippets:
           --batch-size=8 \
           --sequence-length=128 \
           --num-tokens-to-generate=128 \
-          --config-file=config/fa2.json \
+          --config-file=config_fa2.json \
           --commit-id=556312c \
           --no-gpu-monitoring
 
