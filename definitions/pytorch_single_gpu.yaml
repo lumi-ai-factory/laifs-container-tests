@@ -24,7 +24,7 @@ snippets:
 
       export DATADIR=$PWD/data
 
-      cd applications/pytorch
+      cd benchmarks/pytorch
       python3 visiontransformer.py
 
 parse: |

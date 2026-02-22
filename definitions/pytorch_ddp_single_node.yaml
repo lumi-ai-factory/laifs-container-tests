@@ -27,7 +27,7 @@ snippets:
       # torchrun sets this if not already set, here we avoid the warning message
       export OMP_NUM_THREADS=1
 
-      cd applications/pytorch
+      cd benchmarks/pytorch
 
       python3 -m torch.distributed.run \
         --standalone \

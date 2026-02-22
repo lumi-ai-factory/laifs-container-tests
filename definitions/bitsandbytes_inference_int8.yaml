@@ -25,7 +25,7 @@ snippets:
       export DATADIR=$PWD/data
       export HF_HOME=$DATADIR/huggingface
 
-      cd applications/bitsandbytes
+      cd benchmarks/bitsandbytes
 
       python3 inference_benchmark.py \
         LumiOpen/Llama-Poro-2-8B-base \

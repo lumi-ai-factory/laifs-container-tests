@@ -3,27 +3,18 @@
 # Exit setup if any command fails
 set -e
 
-# If no config file is provided, choose last in alphabetical order
-config_file=$1
-if [ -z $config_file ]; then
-    config_file=$(ls -1 ./config/* | tail -n 1)
+# If no extra args file is provided, choose last in alphabetical order
+extra_args_file=$1
+if [ -z $extra_args_file ]; then
+    extra_args_file=$(ls -1 ./extra-args/* | tail -n 1)
 fi
-sif=$(cat $config_file | jq -r .sif)
+sif=$(cat $extra_args_file | jq -r .sif)
 image_name=$(basename $sif .sif)
 
 echo "Running setup for image $image_name..."
 echo
 
-# Ensure required directories exist
-mkdir -p .virtualenvs data
-
-# Get training data for PyTorch tests. This only works on LUMI, since the ImageNet dataset is
-# already available there.
-tiny_imagenet_dataset=/appl/local/training/LUMI-AI-Guide/tiny-imagenet-dataset.hdf5
-train_images=data/pytorch/train_images.hdf5
-if [ -f $tiny_imagenet_dataset ] && [ ! -f $train_images ]; then
-    cp $tiny_imagenet_dataset $train_images
-fi
+mkdir -p .virtualenvs
 
 # Set up runner environment
 if [ ! -d .virtualenvs/runner ]; then

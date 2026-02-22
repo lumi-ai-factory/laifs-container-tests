@@ -13,10 +13,9 @@ typical deep learning workloads.
 
 **This repository contains:**
 
-- **Definition files** for running tests on the LUMI supercomputer using the
+- **Definition and extra arg files** for running tests on the LUMI supercomputer using the
   [Unframe test runner](https://github.com/viahlgre/unframe) (WIP).
-- **Configuration files** for specifying additional parameters for tests.
-- **Application benchmarks** representative of each application's typical usage:
+- **Benchmarks** representative of the typical usage of deep learning libraries:
     - **Benchmark files** for running deep learning workloads.
     - **Source files** listing the origins of all benchmark files obtained from external sources.
     - **Diff files** providing a Git-style summary of any local changes to external benchmark
@@ -26,21 +25,21 @@ typical deep learning workloads.
 
 ## Benchmarks
 
-This section lists the currently available application benchmarks as well as their sources and
+This section lists the currently available benchmarks as well as their sources and
 licenses.
 
-- `applications/bitsandbytes`
+- `benchmarks/bitsandbytes`
     - Source: [bitsandbytes-foundation/bitsandbytes](https://github.com/bitsandbytes-foundation/bitsandbytes)
     - License: [MIT License](https://github.com/bitsandbytes-foundation/bitsandbytes/blob/main/LICENSE)
-- `applications/pytorch`
+- `benchmarks/pytorch`
     - Source: [Lumi-supercomputer/LUMI-AI-Guide](https://github.com/Lumi-supercomputer/LUMI-AI-Guide)
     - License: [Attribution 4.0 International](https://github.com/Lumi-supercomputer/LUMI-AI-Guide/blob/main/LICENSE)
-- `applications/transformers`
+- `benchmarks/transformers`
     - Source: [huggingface/transformers](https://github.com/huggingface/transformers/tree/main)
     - License: [Apache License 2.0](https://github.com/huggingface/transformers/blob/main/LICENSE)
 
 For more detailed information, see the `source.json` and `diff.txt` files included in each
-application directory. The `source.json` file contains permalinks to all files obtained from an
+benchmark directory. The `source.json` file contains permalinks to all files obtained from an
 external source, while any changes made to those files can be viewed in the `diff.txt` file.
 
 Updating diff files
@@ -48,57 +47,63 @@ Updating diff files
 python3 scripts/get_diffs.py
 ```
 
-Showing diff for a particular application
+Showing diff for a particular benchmark
 ```bash
-python3 scripts/show_color_diff.py applications/pytorch
+python3 scripts/show_color_diff.py benchmark/pytorch
 ```
 
 ---
 
 ## Usage
 
-### Configuring test jobs
+### Configuring additional test parameters
 
 Certain test parameters, such as the Slurm accounting identifier and path to the image file, are
-passed to the Unframe runner using JSON configuration files stored in the `config` directory.  When
-testing a container image, you should start by writing a configuration file for it. This repository
-includes a configuration file for running the
+passed to the Unframe runner using JSON files stored in the `extra-args` directory.  When
+testing a container image, you should start by writing an extra args file for it. This repository
+includes an extra args file for running the
 `lumi-multitorch-full-u24r64f21m43t29-20260216_093549` image on LUMI, which can be adapted for
 other images and systems.
 
 > [!NOTE]
-> When using the configuration files provided in this repository, change the `account` parameter to
+> When using the extra args files provided in this repository, change the `account` parameter to
 > your LUMI project identifier.
 
 ### Setting up environment
 
-Run the setup script to copy over data files and install dependencies for the test runner and
-container image. By default, the script sets up a virtual environment for the image specified in the
-configuration file that is last in alphabetical order in the `config` directory. Provided the
-configuration files follow the naming scheme of LUMI AIF container image releases, this corresponds
-to the most recent release.
+Run `scripts/setup_env.sh` to install dependencies for the test runner and container image. By
+default, the script sets up a virtual environment for the image specified in the extra args file
+that is last in alphabetical order in the `extra-args` directory. Provided the extra args files
+follow the naming scheme of LUMI AIF container image releases, this corresponds to the most recent
+release.
 
-Setting up using the last configuration file in alphabetical order
+Setting up using the last extra args file in alphabetical order
 ```bash
-bash scripts/setup.sh
+bash scripts/setup_env.sh
 ```
 
-Setting up using a specific configuration file
+Setting up using a specific extra args file
 ```bash
-bash scripts/setup.sh config/lumi-multitorch-full-u24r64f21m43t29-20260216_093549.json
+bash scripts/setup_env.sh extra-args/lumi-multitorch-full-u24r64f21m43t29-20260216_093549.json
 ```
 
-#### Included data
+### Getting test data
 
-The setup script stores the following data into a directory named `data`.
+The following list indicates the data files required by each benchmark. These are expected to be
+stored in benchmark-specific subdirectories in a directory named `data`, e.g, `data/pytorch`. Some
+of the data files are available system-wide on LUMI. If you are working on LUMI, you can run
+`scripts/get_data_lumi.sh` to copy these files to the correct locations under `data`. Otherwise,
+you will need to do this manually.
 
-- [Tiny ImageNet](https://www.kaggle.com/c/tiny-imagenet) dataset
-    - This dataset is already available on LUMI in HDF5 format. On other systems, you need to
-      download and convert it to HDF5 yourself. The
-      [LUMI AI guide](ttps://github.com/Lumi-supercomputer/LUMI-AI-Guide) provides
-      [instructions for this](https://github.com/Lumi-supercomputer/LUMI-AI-Guide/tree/870ca3bd4ae4c7df818f5eca4af9d251b0194ec9/3-file-formats#hdf5).
-    - Please have a look at the terms of access for the ImageNet dataset
-      [here](https://www.image-net.org/download.php).
+- `benchmarks/pytorch`
+    - [Tiny ImageNet](https://www.kaggle.com/c/tiny-imagenet) dataset
+        - This dataset is already available on LUMI in HDF5 format and is copied under
+          `data/pytorch` by running `scripts/get_data_lumi.sh`. On other systems, you need to
+          download and convert it to HDF5 yourself. The
+          [LUMI AI guide](https://github.com/Lumi-supercomputer/LUMI-AI-Guide) provides
+          [instructions for this](https://github.com/Lumi-supercomputer/LUMI-AI-Guide/tree/870ca3bd4ae4c7df818f5eca4af9d251b0194ec9/3-file-formats#hdf5).
+        - Please have a look at the terms of access for the ImageNet dataset
+          [here](https://www.image-net.org/download.php).
 
 ### Running tests
 
@@ -136,19 +141,19 @@ how to use Unframe for this.
 Running all tests
 ```bash
 unframe --dir definitions \
-    --extra-args-file config/lumi-multitorch-full-u24r64f21m43t29-20260216_093549.json
+    --extra-args-file extra-args/lumi-multitorch-full-u24r64f21m43t29-20260216_093549.json
 ```
 
 Running test(s) with the name `transformers_inference_sdpa`
 ```bash
 unframe --dir definitions --name transformers_inference_sdpa \
-    --extra-args-file config/lumi-multitorch-full-u24r64f21m43t29-20260216_093549.json
+    --extra-args-file extra-args/lumi-multitorch-full-u24r64f21m43t29-20260216_093549.json
 ```
 
 Running test(s) with the tag `transformers`
 ```bash
 unframe --dir definitions --tag transformers \
-    --extra-args-file config/lumi-multitorch-full-u24r64f21m43t29-20260216_093549.json
+    --extra-args-file extra-args/lumi-multitorch-full-u24r64f21m43t29-20260216_093549.json
 ```
 
 For more information on how to use Unframe, run `unframe --help`.

@@ -25,7 +25,7 @@ snippets:
       export DATADIR=$PWD/data
       export HF_HOME=$DATADIR/huggingface
 
-      cd applications/transformers
+      cd benchmarks/transformers
 
       python3 run_benchmarks.py \
           --output-dir=$DATADIR/transformers/benchmark_results \

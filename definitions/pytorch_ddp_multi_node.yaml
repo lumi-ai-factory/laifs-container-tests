@@ -31,7 +31,7 @@ snippets:
       # Set rendezvous port using job ID, as the default port is likely in use
       RDZV_PORT="1""${SLURM_JOB_ID:0-4}"
 
-      cd applications/pytorch
+      cd benchmarks/pytorch
 
       python3 -m torch.distributed.run \
         --nnodes=$SLURM_NNODES \
