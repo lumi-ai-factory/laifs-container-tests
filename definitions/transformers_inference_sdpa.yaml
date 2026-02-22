@@ -26,7 +26,7 @@ snippets:
 
       cd benchmarks/transformers
       python3 run_benchmarks.py \
-          --model-id=mistralai/Ministral-3-8B-Base-2512 \
+          --model-id=LumiOpen/Llama-Poro-2-8B-Base \
           --batch-size=8 \
           --sequence-length=128 \
           --num-tokens-to-generate=128 \
