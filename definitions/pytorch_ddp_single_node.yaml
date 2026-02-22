@@ -1,11 +1,11 @@
 name: pytorch_ddp_single_node
-tags: [gpu, pytorch, multi-gpu, single-node]
+tags: [pytorch, training, multi-gpu]
 description: PyTorch DDP single-node training
 
 job:
   - srun
   - --account={{ extra_args.account }}
-  - --partition={{ extra_args.partition }}
+  - --partition=dev-g
   - --nodes=1
   - --gpus-per-node=8
   - --ntasks-per-node=1

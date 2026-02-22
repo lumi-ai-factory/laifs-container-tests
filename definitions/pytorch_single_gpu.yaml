@@ -1,11 +1,11 @@
 name: pytorch_single_gpu
-tags: [pytorch, gpu, single-node]
+tags: [pytorch, training]
 description: PyTorch single-GPU training
 
 job:
   - srun
   - --account={{ extra_args.account }}
-  - --partition={{ extra_args.partition }}
+  - --partition=dev-g
   - --gpus-per-node=1
   - --ntasks-per-node=1
   - --cpus-per-task=7

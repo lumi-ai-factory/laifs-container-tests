@@ -1,11 +1,11 @@
 name: pytorch_ddp_multi_node
-tags: [gpu, pytorch, multi-gpu, multi-node]
+tags: [pytorch, training, multi-gpu, multi-node]
 description: PyTorch DDP multi-node training
 
 job:
   - srun
   - --account={{ extra_args.account }}
-  - --partition={{ extra_args.partition }}
+  - --partition=dev-g
   - --nodes=4
   - --gpus-per-node=8
   - --ntasks-per-node=1

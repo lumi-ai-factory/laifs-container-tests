@@ -5,7 +5,7 @@ description: BitsAndBytes inference with INT8 quantization
 job:
   - srun
   - --account={{ extra_args.account }}
-  - --partition={{ extra_args.partition }}
+  - --partition=dev-g
   - --gpus-per-node=1
   - --ntasks-per-node=1
   - --cpus-per-task=7
