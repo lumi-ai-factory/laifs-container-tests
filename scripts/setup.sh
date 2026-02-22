@@ -32,8 +32,7 @@ deactivate
 echo
 
 # Set up container environment
-ml -q purge && ml use /appl/local/laifs/modules && ml lumi-aif-singularity-bindings
-singularity run $sif bash -c "if [ ! -d .virtualenvs/$image_name ]; then \
+singularity run -B $PWD $sif bash -c "if [ ! -d .virtualenvs/$image_name ]; then \
     python3 -m venv .virtualenvs/$image_name --system-site-packages; \
     fi; \
     source .virtualenvs/$image_name/bin/activate; \
