@@ -7,11 +7,11 @@ import urllib.request
 
 
 def main():
-    apps_dir = Path("applications")
+    benches_dir = Path("benchmarks")
 
-    for app_dir in apps_dir.iterdir():
-        source_file = app_dir / "sources.json"
-        diff_file = app_dir / "diff.txt"
+    for bench_dir in benches_dir.iterdir():
+        source_file = bench_dir / "sources.json"
+        diff_file = bench_dir / "diff.txt"
 
         if not source_file.exists():
             continue
@@ -23,7 +23,7 @@ def main():
             pass
 
         for local, remote in sources.items():
-            with open(app_dir / local) as f:
+            with open(bench_dir / local) as f:
                 lines_local = f.read().splitlines(keepends=True)
             with urllib.request.urlopen(remote) as f:
                 lines_remote = f.read().decode("utf-8").splitlines(keepends=True)

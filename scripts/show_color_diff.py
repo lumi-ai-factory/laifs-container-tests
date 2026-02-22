@@ -7,13 +7,13 @@ import sys
 
 
 def main(input_path):
-    app_dir = Path(input_path)
+    bench_dir = Path(input_path)
 
-    with open(app_dir / "diff.txt") as f:
+    with open(bench_dir / "diff.txt") as f:
         lines_plain = f.readlines()
 
     # Use names of source files for matching filename control lines
-    with open(app_dir / "sources.json") as f:
+    with open(bench_dir / "sources.json") as f:
         sources = json.load(f)
 
     lines_color = []
