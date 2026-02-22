@@ -90,10 +90,11 @@ bash scripts/setup_env.sh extra-args/lumi-multitorch-full-u24r64f21m43t29-202602
 ### Getting test data
 
 The following list indicates the data files required by each benchmark. These are expected to be
-stored in benchmark-specific subdirectories in a directory named `data`, e.g, `data/pytorch`. Some
-of the data files are available system-wide on LUMI. If you are working on LUMI, you can run
-`scripts/get_data_lumi.sh` to copy these files to the correct locations under `data`. Otherwise,
-you will need to do this manually.
+stored in benchmark-specific subdirectories in a directory named `data`, e.g, `data/pytorch`. This
+is also the location where benchmark outputs should be written to. Some of the data files are
+available system-wide on LUMI. If you are working on LUMI, you can run `scripts/get_data_lumi.sh`
+to copy these files to the correct locations under `data`. Otherwise, you will need to do this
+manually.
 
 - `benchmarks/pytorch`
     - [Tiny ImageNet](https://www.kaggle.com/c/tiny-imagenet) dataset
