@@ -15,6 +15,7 @@ def main():
 
         if not source_file.exists():
             continue
+
         with open(source_file) as f:
             sources = json.load(f)
 
