@@ -6,34 +6,35 @@ import re
 import sys
 
 
-def main(input_file):
-    diff_file = Path(input_file)
+def main(input_path):
+    app_dir = Path(input_path)
 
-    with open(diff_file) as f:
-        lines_old = f.readlines()
+    with open(app_dir / "diff.txt") as f:
+        lines_plain = f.readlines()
 
-    with open(diff_file.parent / "sources.json") as f:
+    # Use names of source files for matching filename control lines
+    with open(app_dir / "sources.json") as f:
         sources = json.load(f)
 
-    lines_new = []
-    for line in lines_old:
+    lines_color = []
+    for line in lines_plain:
         for local, remote in sources.items():
-            # Filenames in bold
+            # Filename control lines in bold
             line = re.sub(fr"^(---{remote})$", "\033[1m" + r"\1" + "\033[0m", line)
             line = re.sub(fr"^(\+\+\+{local})$", "\033[1m" + r"\1" + "\033[0m", line)
 
-        # Context in cyan
+        # Context control lines in cyan
         line = re.sub(
             r"^(@@\s-\d+,\d+\s\+\d+,\d+\s@@)", "\033[36m" + r"\1" + "\033[0m", line
         )
-        # Old in red
+        # Old lines in red
         line = re.sub(r"^(-.*)$", "\033[31m" + r"\1" + "\033[0m", line)
-        # New in green
+        # New lines in green
         line = re.sub(r"^(\+.*)$", "\033[32m" + r"\1" + "\033[0m", line)
 
-        lines_new.append(line)
+        lines_color.append(line)
 
-    print("".join(lines_new), end="")
+    print("".join(lines_color), end="")
 
 
 if __name__ == "__main__":
