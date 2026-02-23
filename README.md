@@ -34,6 +34,11 @@ directory.
         - `bitsandbytes_inference_int8`
     - Source: [bitsandbytes-foundation/bitsandbytes](https://github.com/bitsandbytes-foundation/bitsandbytes)
     - License: [MIT License](https://github.com/bitsandbytes-foundation/bitsandbytes/blob/main/LICENSE)
+- [`benchmarks/peft`](benchmarks/peft)
+    - Tests:
+        - `alora_finetuning`
+    - Source: [huggingface/peft](https://github.com/huggingface/peft)
+    - License: [Apache License 2.0](https://github.com/lumi-ai-factory/laifs-container-tests/tree/mai://github.com/huggingface/peft/blob/main/LICENSE)
 - [`benchmarks/pytorch`](benchmarks/pytorch)
     - Tests:
         - `pytorch_single_gpu`

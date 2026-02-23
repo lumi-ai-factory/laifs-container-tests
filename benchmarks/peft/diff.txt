@@ -1,0 +1,10 @@
+--- https://raw.githubusercontent.com/huggingface/peft/refs/heads/main/examples/alora_finetuning/alora_finetuning.py
++++ alora_finetuning.py
+@@ -135,6 +135,7 @@
+         fp16=True,
+         learning_rate=learning_rate,
+         hub_token=hf_token,
++        report_to="none",
+     )
+ 
+     if torch.cuda.is_available():

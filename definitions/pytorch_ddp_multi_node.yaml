@@ -33,12 +33,12 @@ snippets:
       cd benchmarks/pytorch
 
       python3 -m torch.distributed.run \
-        --nnodes=$SLURM_NNODES \
-        --nproc_per_node=$SLURM_GPUS_PER_NODE \
-        --rdzv-id=$SLURM_JOB_ID \
-        --rdzv-backend=c10d \
-        --rdzv-endpoint=$RDZV_HOST:$RDZV_PORT \
-        ddp_visiontransformer.py
+          --nnodes=$SLURM_NNODES \
+          --nproc_per_node=$SLURM_GPUS_PER_NODE \
+          --rdzv-id=$SLURM_JOB_ID \
+          --rdzv-backend=c10d \
+          --rdzv-endpoint=$RDZV_HOST:$RDZV_PORT \
+          ddp_visiontransformer.py
 
 parse: |
   def parse(text, params):

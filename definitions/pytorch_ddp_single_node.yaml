@@ -29,10 +29,10 @@ snippets:
       cd benchmarks/pytorch
 
       python3 -m torch.distributed.run \
-        --standalone \
-        --nnodes=$SLURM_NNODES \
-        --nproc_per_node=$SLURM_GPUS_PER_NODE \
-        ddp_visiontransformer.py
+          --standalone \
+          --nnodes=$SLURM_NNODES \
+          --nproc_per_node=$SLURM_GPUS_PER_NODE \
+          ddp_visiontransformer.py
 
 parse: |
   def parse(text, params):

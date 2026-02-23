@@ -23,12 +23,64 @@ snippets:
       source .virtualenvs/$(basename $SINGULARITY_NAME .sif)/bin/activate
 
       export HF_HOME=$PWD/data/huggingface
-      export WANDB_DISABLED=1
 
       cd benchmarks/peft
       python3 alora_finetuning.py \
-          --base_model LumiOpen/Llama-Poro-2-8B-Instruct \
+          --base_model mistralai/Mistral-7B-Instruct-v0.3 \
           --data_path Lots-of-LoRAs/task1660_super_glue_question_generation \
           --output_dir=output \
-          --invocation_string "<|start_header_id|>assistant<|end_header_id|>" \
+          --invocation_string "[/INST]" \
 
+parse: |
+  def parse(text, params):
+        import json
+
+        metrics = {
+            "train_runtime", "train_samples_per_second",
+            "train_steps_per_second", "train_loss",
+        }
+
+        results = {}
+        for line in text.splitlines():
+            try:
+                results.update(json.loads(line.replace("'", '"')))
+            except Exception as e:
+                continue
+
+        return {k: float(v) for k, v in results.items() if k in metrics}
+
+validate: |
+  def validate(results, params):
+      import json
+
+      if not results:
+          return (False, "no results to validate")
+
+      limits = {
+          "train_runtime": {"type": "max", "unit": "s", "value": 1500.0},
+          "train_samples_per_second": {"type": "min", "unit": "samples/s", "value": 1.0},
+          "train_steps_per_second": {"type": "min", "unit": "steps/s", "value": 0.05},
+          "train_loss": {"type": "max", "unit": "", "value": 2.5},
+      }
+
+      all_ok = True
+      validate_res = {}
+
+      for metric, limit in limits.items():
+          res = results[metric]
+          ok = True
+
+          if (
+              limit["type"] == "max" and res > limit["value"]
+              or limit["type"] == "min" and res < limit["value"]
+          ):
+              ok = False
+              all_ok = False
+
+          validate_res[metric] = {
+              "limit": f"{round(limit['value'], 3)}{limit['unit']} ({limit['type']})",
+              "value": f"{round(res, 3)}{limit['unit']}",
+              "status": "pass" if ok else "fail",
+          }
+
+      return (all_ok, json.dumps(validate_res))

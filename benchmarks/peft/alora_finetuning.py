@@ -135,6 +135,7 @@ def train_model(
         fp16=True,
         learning_rate=learning_rate,
         hub_token=hf_token,
+        report_to="none",
     )
 
     if torch.cuda.is_available():
