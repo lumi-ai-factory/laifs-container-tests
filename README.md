@@ -44,6 +44,8 @@ directory.
         - `pytorch_single_gpu`
         - `pytorch_ddp_single_node`
         - `pytorch_ddp_multi_node`
+        - `pytorch_ds_single_node`
+        - `pytorch_ds_multi_node`
     - Source: [Lumi-supercomputer/LUMI-AI-Guide](https://github.com/Lumi-supercomputer/LUMI-AI-Guide)
     - License: [Attribution 4.0 International](https://github.com/Lumi-supercomputer/LUMI-AI-Guide/blob/main/LICENSE)
 - [`benchmarks/transformers`](benchmarks/transformers)

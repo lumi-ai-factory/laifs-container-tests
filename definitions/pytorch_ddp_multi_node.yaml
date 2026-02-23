@@ -1,6 +1,6 @@
 name: pytorch_ddp_multi_node
-tags: [pytorch, training, multi-gpu, multi-node]
-description: PyTorch DDP multi-node training
+tags: [pytorch, ddp, training, multi-gpu, multi-node]
+description: PyTorch multi-node training using Distributed Data Parallel
 
 job:
   - srun
@@ -31,7 +31,6 @@ snippets:
       RDZV_PORT="1""${SLURM_JOB_ID:0-4}"
 
       cd benchmarks/pytorch
-
       python3 -m torch.distributed.run \
           --nnodes=$SLURM_NNODES \
           --nproc_per_node=$SLURM_GPUS_PER_NODE \

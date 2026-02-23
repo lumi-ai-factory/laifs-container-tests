@@ -1,19 +1,22 @@
 import torch
 import os
 import time
+import argparse
+import deepspeed
 import psutil
 import torchvision.transforms as transforms
 from torchvision.models import vit_b_16
 from torch.utils.data import DataLoader, random_split
-from torch.nn.parallel import DistributedDataParallel
-import torch.distributed as dist
 from torch.utils.data.distributed import DistributedSampler
 import sys
 
 from hdf5_dataset import HDF5Dataset
 
+parser = argparse.ArgumentParser()
+parser = deepspeed.add_config_arguments(parser)
+args = parser.parse_args()
 
-# The performance of the CPU mapping needs to be tested
+
 def set_cpu_affinity(local_rank):
     LUMI_GPU_CPU_map = {
         # A mapping from GCD to the closest CPU cores in a LUMI-G node
@@ -34,8 +37,6 @@ def set_cpu_affinity(local_rank):
     psutil.Process().cpu_affinity(cpu_list)
 
 
-dist.init_process_group(backend="nccl")
-
 local_rank = int(os.environ["LOCAL_RANK"])
 torch.cuda.set_device(local_rank)
 rank = int(os.environ["RANK"])
@@ -51,19 +52,17 @@ transform = transforms.Compose(
     ]
 )
 
-
-model = vit_b_16(weights="DEFAULT").to(local_rank)
-model = DistributedDataParallel(model, device_ids=[local_rank])
-
+model = vit_b_16(weights="DEFAULT")
 criterion = torch.nn.CrossEntropyLoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
 
+deepspeed.init_distributed()
 
-def train_model(model, criterion, optimizer, train_loader, val_loader, epochs=10):
-    # note that "cuda" is used as a general reference to GPUs,
-    # even when running on AMD GPUs that use ROCm
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    model.to(device)
+
+def train_model(args, model, criterion, optimizer, train_loader, val_loader, epochs=10):
+    model_engine, optimizer, _, _ = deepspeed.initialize(
+        args=args, model=model, model_parameters=model.parameters()
+    )
 
     if rank == 0:
         start = time.time()
@@ -73,14 +72,16 @@ def train_model(model, criterion, optimizer, train_loader, val_loader, epochs=10
         model.train()
         running_loss = 0.0
         for images, labels in train_loader:
-            images, labels = images.to(device), labels.to(device)
-
+            images, labels = images.to(model_engine.local_rank), labels.to(
+                model_engine.local_rank
+            )
             optimizer.zero_grad()
-            outputs = model(images)
-            loss = criterion(outputs, labels)
-            loss.backward()
-            optimizer.step()
 
+            outputs = model_engine(images)
+            loss = criterion(outputs, labels)
+
+            model_engine.backward(loss)
+            model_engine.step()
             running_loss += loss.item()
 
         if rank == 0:
@@ -93,8 +94,10 @@ def train_model(model, criterion, optimizer, train_loader, val_loader, epochs=10
         total = 0
         with torch.no_grad():
             for images, labels in val_loader:
-                images, labels = images.to(device), labels.to(device)
-                outputs = model(images)
+                images, labels = images.to(model_engine.local_rank), labels.to(
+                    model_engine.local_rank
+                )
+                outputs = model_engine(images)
                 _, predicted = torch.max(outputs, 1)
                 total += labels.size(0)
                 correct += (predicted == labels).sum().item()
@@ -129,8 +132,6 @@ with HDF5Dataset("train_images.hdf5", transform=transform) as full_train_dataset
         val_dataset, sampler=val_sampler, batch_size=32, num_workers=7
     )
 
-    train_model(model, criterion, optimizer, train_loader, val_loader, epochs=5)
-
-    dist.destroy_process_group()
+    train_model(args, model, criterion, optimizer, train_loader, val_loader, epochs=5)
 
 torch.save(model.state_dict(), "vit_b_16_imagenet.pth")

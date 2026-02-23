@@ -1,12 +1,12 @@
-name: pytorch_ddp_single_node
-tags: [pytorch, ddp, training, multi-gpu]
-description: PyTorch single-node training using Distributed Data Parallel
+name: pytorch_ds_multi_node
+tags: [pytorch, deepspeed, training, multi-gpu, multi-node]
+description: PyTorch multi-node training with DeepSpeed
 
 job:
   - srun
   - --account={{ extra_args.account }}
   - --partition=dev-g
-  - --nodes=1
+  - --nodes=4
   - --gpus-per-node=8
   - --ntasks-per-node=1
   - --cpus-per-task=56
@@ -21,17 +21,26 @@ job:
 snippets:
   - name: script
     content: |
-      source .virtualenvs/$(basename $SINGULARITY_NAME .sif)/bin/activate                                
+      source .virtualenvs/$(basename $SINGULARITY_NAME .sif)/bin/activate
 
       # torchrun sets this if not already set, here we avoid the warning message
       export OMP_NUM_THREADS=1
+      # This would be cleaner with scontrol, but it is not in the container
+      RDZV_HOST="nid""$(echo $SLURM_JOB_NODELIST | grep -Eo [0-9]+ | head -n 1)"
+      # Set rendezvous port using job ID, as the default port is likely in use
+      RDZV_PORT="1""${SLURM_JOB_ID:0-4}"
 
       cd benchmarks/pytorch
       python3 -m torch.distributed.run \
-          --standalone \
           --nnodes=$SLURM_NNODES \
           --nproc_per_node=$SLURM_GPUS_PER_NODE \
-          ddp_visiontransformer.py
+          --node_rank $SLURM_PROCID \
+          --rdzv-id=$SLURM_JOB_ID \
+          --rdzv-backend=c10d \
+          --rdzv-endpoint=$RDZV_HOST:$RDZV_PORT \
+          ds_visiontransformer.py \
+          --deepspeed \
+          --deepspeed_config ds_config.json
 
 parse: |
   def parse(text, params):

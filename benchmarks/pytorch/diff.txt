@@ -18,13 +18,15 @@
          model.train()
          running_loss = 0.0
          for images, labels in train_loader:
-@@ -100,14 +100,17 @@
+@@ -85,6 +85,7 @@
  
          if rank == 0:
-             print(f"Accuracy: {100 * correct / total}%")
+             print(f"Epoch {epoch+1}, Loss: {running_loss/len(train_loader)}")
 +            print(f"Time: {round(time.time() - epoch_start, 2)}s")
  
-     if rank == 0:
+         # Validation step, note that only results from rank 0 are used here.
+         model.eval()
+@@ -105,9 +106,11 @@
          print(f"Time elapsed (s): {time.time()-start}")
  
  
@@ -48,6 +50,57 @@
  
      dist.destroy_process_group()
  
+--- https://raw.githubusercontent.com/Lumi-supercomputer/LUMI-AI-Guide/870ca3bd4ae4c7df818f5eca4af9d251b0194ec9/5-multi-gpu-and-node/ds_visiontransformer.py
++++ ds_visiontransformer.py
+@@ -10,8 +10,7 @@
+ from torch.utils.data.distributed import DistributedSampler
+ import sys
+ 
+-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+-from resources.hdf5_dataset import HDF5Dataset
++from hdf5_dataset import HDF5Dataset
+ 
+ parser = argparse.ArgumentParser()
+ parser = deepspeed.add_config_arguments(parser)
+@@ -69,6 +68,7 @@
+         start = time.time()
+ 
+     for epoch in range(epochs):
++        epoch_start = time.time()
+         model.train()
+         running_loss = 0.0
+         for images, labels in train_loader:
+@@ -86,6 +86,7 @@
+ 
+         if rank == 0:
+             print(f"Epoch {epoch+1}, Loss: {running_loss/len(train_loader)}")
++            print(f"Time: {round(time.time() - epoch_start, 2)}s")
+ 
+         # Validation step, note that only results from rank 0 are used here.
+         model.eval()
+@@ -108,9 +109,11 @@
+         print(f"Time elapsed (s): {time.time()-start}")
+ 
+ 
+-with HDF5Dataset(
+-    "../resources/train_images.hdf5", transform=transform
+-) as full_train_dataset:
++with HDF5Dataset("train_images.hdf5", transform=transform) as full_train_dataset:
++    # Subset the dataset for benchmarking
++    full_train_dataset = torch.utils.data.Subset(
++        full_train_dataset, range(0, int(0.1 * len(full_train_dataset)))
++    )
+ 
+     # Splitting the dataset into train and validation sets
+     train_size = int(0.8 * len(full_train_dataset))
+@@ -129,6 +132,6 @@
+         val_dataset, sampler=val_sampler, batch_size=32, num_workers=7
+     )
+ 
+-    train_model(args, model, criterion, optimizer, train_loader, val_loader)
++    train_model(args, model, criterion, optimizer, train_loader, val_loader, epochs=5)
+ 
+ torch.save(model.state_dict(), "vit_b_16_imagenet.pth")
 --- https://raw.githubusercontent.com/Lumi-supercomputer/LUMI-AI-Guide/6bc200c40cb1fc4220985b9500b45fe5c5b74c35/1-quickstart/visiontransformer.py
 +++ visiontransformer.py
 @@ -4,9 +4,9 @@

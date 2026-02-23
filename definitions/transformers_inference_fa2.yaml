@@ -1,5 +1,5 @@
 name: transformers_inference_fa2
-tags: [transformers, inference, flash-attention]
+tags: [transformers, flash-attention, inference]
 description: Transformers inference with Flash Attention 2
 
 job:
