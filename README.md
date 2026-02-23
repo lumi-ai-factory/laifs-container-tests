@@ -59,7 +59,7 @@ python3 scripts/get_diffs.py
 
 Showing diff for a particular benchmark
 ```bash
-python3 scripts/show_color_diff.py benchmark/pytorch
+python3 scripts/show_color_diff.py benchmarks/pytorch
 ```
 
 ---
