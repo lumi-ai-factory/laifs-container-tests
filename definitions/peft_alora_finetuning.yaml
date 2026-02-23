@@ -1,0 +1,34 @@
+name: peft_alora_finetuning
+tags: [peft, training]
+description: Transformers fine-tuning using aLoRA PEFT adapter
+
+job:
+  - srun
+  - --account={{ extra_args.account }}
+  - --partition=dev-g
+  - --gpus-per-node=1
+  - --ntasks-per-node=1
+  - --cpus-per-task=7
+  - --mem-per-gpu=60G
+  - --time=00:30:00
+  - singularity
+  - run
+  - "{{ extra_args.sif }}"
+  - bash -c
+  - "{{ snippet.script }}"
+
+snippets:
+  - name: script
+    content: |
+      source .virtualenvs/$(basename $SINGULARITY_NAME .sif)/bin/activate
+
+      export HF_HOME=$PWD/data/huggingface
+      export WANDB_DISABLED=1
+
+      cd benchmarks/peft
+      python3 alora_finetuning.py \
+          --base_model LumiOpen/Llama-Poro-2-8B-Instruct \
+          --data_path Lots-of-LoRAs/task1660_super_glue_question_generation \
+          --output_dir=output \
+          --invocation_string "<|start_header_id|>assistant<|end_header_id|>" \
+

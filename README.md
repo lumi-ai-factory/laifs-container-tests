@@ -25,16 +25,26 @@ typical deep learning workloads.
 
 ## Benchmarks
 
-This section lists the currently available benchmarks as well as their sources and
-licenses.
+This section lists currently available benchmarks as well as the sources and licenses of the
+benchmark files. The tests listed for each benchmark can be found under the `definitions`
+directory.
 
-- `benchmarks/bitsandbytes`
+- [`benchmarks/bitsandbytes`](benchmarks/bitsandbytes)
+    - Tests:
+        - `bitsandbytes_inference_int8`
     - Source: [bitsandbytes-foundation/bitsandbytes](https://github.com/bitsandbytes-foundation/bitsandbytes)
     - License: [MIT License](https://github.com/bitsandbytes-foundation/bitsandbytes/blob/main/LICENSE)
-- `benchmarks/pytorch`
+- [`benchmarks/pytorch`](benchmarks/pytorch)
+    - Tests:
+        - `pytorch_single_gpu`
+        - `pytorch_ddp_single_node`
+        - `pytorch_ddp_multi_node`
     - Source: [Lumi-supercomputer/LUMI-AI-Guide](https://github.com/Lumi-supercomputer/LUMI-AI-Guide)
     - License: [Attribution 4.0 International](https://github.com/Lumi-supercomputer/LUMI-AI-Guide/blob/main/LICENSE)
-- `benchmarks/transformers`
+- [`benchmarks/transformers`](benchmarks/transformers)
+    - Tests:
+        - `transformers_inference_sdpa`
+        - `transformers_inference_fa2`
     - Source: [huggingface/transformers](https://github.com/huggingface/transformers/tree/main)
     - License: [Apache License 2.0](https://github.com/huggingface/transformers/blob/main/LICENSE)
 
