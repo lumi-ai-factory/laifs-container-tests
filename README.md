@@ -48,8 +48,8 @@ directory.
     - Source: [huggingface/transformers](https://github.com/huggingface/transformers/tree/main)
     - License: [Apache License 2.0](https://github.com/huggingface/transformers/blob/main/LICENSE)
 
-For more detailed information, see the `source.json` and `diff.txt` files included in each
-benchmark directory. The `source.json` file contains permalinks to all files obtained from an
+For more detailed information, see the `sources.json` and `diff.txt` files included in each
+benchmark directory. The `sources.json` file contains permalinks to all files obtained from an
 external source, while any changes made to those files can be viewed in the `diff.txt` file.
 
 Updating diff files
