@@ -4,7 +4,9 @@ SLURM_ACCOUNT=$1
 SIF_PATH=$2
 
 GIT_COMMIT=$(cat .git/$(cat .git/HEAD | head -n 1 | awk -F " " '{ print $2 }'))
-echo "Running tests from commit ${GIT_COMMIT}"
+
+echo "Automated test commit: ${GIT_COMMIT:0:7}"
+echo
 
 # Get test data on LUMI
 bash scripts/get_lumi_data.sh
