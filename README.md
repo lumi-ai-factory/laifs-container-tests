@@ -86,7 +86,7 @@ directory named `data` at the top of the directory tree of this repository.
 - `benchmarks/pytorch`
     - [Tiny ImageNet](https://www.kaggle.com/c/tiny-imagenet) dataset
         - This dataset is already available on LUMI in HDF5 format and can be copied into the
-          benchmark directory by running `scripts/get_data_lumi.sh`. On other systems, you need to
+          benchmark directory by running `scripts/get_lumi_data.sh`. On other systems, you need to
           download and convert the dataset to HDF5 yourself. The
           [LUMI AI guide](https://github.com/Lumi-supercomputer/LUMI-AI-Guide) provides
           [instructions for doing this](https://github.com/Lumi-supercomputer/LUMI-AI-Guide/tree/870ca3bd4ae4c7df818f5eca4af9d251b0194ec9/3-file-formats#hdf5).
