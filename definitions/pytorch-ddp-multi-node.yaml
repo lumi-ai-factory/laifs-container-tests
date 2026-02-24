@@ -1,5 +1,5 @@
-name: pytorch_ddp_multi_node
-tags: [pytorch, ddp, training, multi-gpu, multi-node]
+name: pytorch-ddp-multi_node
+tags: [pytorch, ddp, training, multi-gpu, multi-node, release]
 description: PyTorch multi-node training using Distributed Data Parallel
 
 job:

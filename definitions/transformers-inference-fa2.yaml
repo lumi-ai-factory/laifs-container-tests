@@ -1,6 +1,6 @@
-name: transformers_inference_sdpa
-tags: [transformers, inference]
-description: Transformers inference with scaled dot-product attention
+name: transformers-inference-fa2
+tags: [transformers, flash-attention, inference, release]
+description: Transformers inference with Flash Attention 2
 
 job:
   - srun
@@ -30,7 +30,7 @@ snippets:
           --batch-size=8 \
           --sequence-length=128 \
           --num-tokens-to-generate=128 \
-          --config-file=config_sdpa.json \
+          --config-file=config_fa2.json \
           --commit-id=556312c \
           --no-gpu-monitoring
 

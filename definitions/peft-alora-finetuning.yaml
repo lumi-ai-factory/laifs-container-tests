@@ -1,5 +1,5 @@
-name: peft_alora_finetuning
-tags: [peft, training]
+name: peft-alora-finetuning
+tags: [peft, training, release]
 description: Transformers fine-tuning using aLoRA PEFT adapter
 
 job:

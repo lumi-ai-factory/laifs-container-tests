@@ -1,5 +1,5 @@
-name: pytorch_ddp_single_node
-tags: [pytorch, ddp, training, multi-gpu]
+name: pytorch-ddp-single_node
+tags: [pytorch, ddp, training, multi-gpu, release]
 description: PyTorch single-node training using Distributed Data Parallel
 
 job:

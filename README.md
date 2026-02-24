@@ -31,27 +31,27 @@ directory.
 
 - [`benchmarks/bitsandbytes`](benchmarks/bitsandbytes)
     - Tests:
-        - `bitsandbytes_inference_int8`
+        - `bitsandbytes-inference-int8`
     - Source: [bitsandbytes-foundation/bitsandbytes](https://github.com/bitsandbytes-foundation/bitsandbytes)
     - License: [MIT License](https://github.com/bitsandbytes-foundation/bitsandbytes/blob/main/LICENSE)
 - [`benchmarks/peft`](benchmarks/peft)
     - Tests:
-        - `alora_finetuning`
+        - `peft-alora-finetuning`
     - Source: [huggingface/peft](https://github.com/huggingface/peft)
     - License: [Apache License 2.0](https://github.com/lumi-ai-factory/laifs-container-tests/tree/mai://github.com/huggingface/peft/blob/main/LICENSE)
 - [`benchmarks/pytorch`](benchmarks/pytorch)
     - Tests:
-        - `pytorch_single_gpu`
-        - `pytorch_ddp_single_node`
-        - `pytorch_ddp_multi_node`
-        - `pytorch_ds_single_node`
-        - `pytorch_ds_multi_node`
+        - `pytorch-single-gpu`
+        - `pytorch-ddp-single-node`
+        - `pytorch-ddp-multi-node`
+        - `pytorch-ds-single-node`
+        - `pytorch-ds-multi-node`
     - Source: [Lumi-supercomputer/LUMI-AI-Guide](https://github.com/Lumi-supercomputer/LUMI-AI-Guide)
     - License: [Attribution 4.0 International](https://github.com/Lumi-supercomputer/LUMI-AI-Guide/blob/main/LICENSE)
 - [`benchmarks/transformers`](benchmarks/transformers)
     - Tests:
-        - `transformers_inference_sdpa`
-        - `transformers_inference_fa2`
+        - `transformers-inference-sdpa`
+        - `transformers-inference-fa2`
     - Source: [huggingface/transformers](https://github.com/huggingface/transformers/tree/main)
     - License: [Apache License 2.0](https://github.com/huggingface/transformers/blob/main/LICENSE)
 
@@ -161,9 +161,9 @@ unframe --dir definitions \
     --extra-args-file extra-args/lumi-multitorch-full-u24r64f21m43t29-20260216_093549.json
 ```
 
-Running test(s) with the name `transformers_inference_sdpa`
+Running test(s) with the name `transformers-inference-sdpa`
 ```bash
-unframe --dir definitions --name transformers_inference_sdpa \
+unframe --dir definitions --name transformers-inference-sdpa \
     --extra-args-file extra-args/lumi-multitorch-full-u24r64f21m43t29-20260216_093549.json
 ```
 

@@ -1,5 +1,5 @@
-name: bitsandbytes_inference_int8
-tags: [bitsandbytes, inference]
+name: bitsandbytes-inference-int8
+tags: [bitsandbytes, inference, int8, release]
 description: BitsAndBytes inference with INT8 quantization
 
 job:
