@@ -9,15 +9,22 @@ import urllib.request
 def main():
     benches_dir = Path("benchmarks")
 
+    print("Getting diffs...")
     for bench_dir in benches_dir.iterdir():
         source_file = bench_dir / "sources.json"
         diff_file = bench_dir / "diff.txt"
+        old_diff = None
+        new_diff = None
 
         if not source_file.exists():
             continue
 
         with open(source_file) as f:
             sources = json.load(f)
+
+        if diff_file.exists():
+            with open(diff_file) as f:
+                old_diff = f.read()
 
         with open(diff_file, "w"):
             # Erase file contents
@@ -38,6 +45,17 @@ def main():
             with open(diff_file, "a") as f:
                 f.writelines(lines_diff)
 
+        if old_diff is not None:
+            with open(diff_file) as f:
+                new_diff = f.read()
+            if old_diff != new_diff:
+                print("Updated:", diff_file)
+            else:
+                print("Unchanged:", diff_file)
+        else:
+            print("Created:", diff_file)
+
+    print("Done!")
 
 if __name__ == "__main__":
     main()
