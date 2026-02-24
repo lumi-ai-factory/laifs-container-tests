@@ -5,8 +5,7 @@ SIF_PATH=$2
 
 GIT_COMMIT=$(cat .git/$(cat .git/HEAD | head -n 1 | awk -F " " '{ print $2 }'))
 
-echo "Automated test commit: ${GIT_COMMIT:0:7}"
-echo
+echo "Test suite commit: ${GIT_COMMIT:0:7}"
 
 # Get test data on LUMI
 bash scripts/get_lumi_data.sh
