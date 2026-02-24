@@ -11,7 +11,7 @@ fi
 sif=$(cat $extra_args_file | jq -r .sif)
 image_name=$(basename $sif .sif)
 
-echo "Running setup for image $image_name..."
+echo "Running setup for image $image_name"
 echo
 
 mkdir -p .virtualenvs
