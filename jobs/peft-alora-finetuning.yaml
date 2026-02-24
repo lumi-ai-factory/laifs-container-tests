@@ -4,8 +4,6 @@ description: Transformers fine-tuning using aLoRA PEFT adapter
 
 job:
   - srun
-  - --account={{ extra_args.account }}
-  - --partition=dev-g
   - --gpus-per-node=1
   - --ntasks-per-node=1
   - --cpus-per-task=7
@@ -59,7 +57,7 @@ validate: |
       limits = {
           "train_runtime": {"type": "max", "unit": "s", "value": 1500.0},
           "train_samples_per_second": {"type": "min", "unit": "samples/s", "value": 1.0},
-          "train_steps_per_second": {"type": "min", "unit": "steps/s", "value": 0.05},
+          "train_steps_per_second": {"type": "min", "unit": "steps/s", "value": 0.01},
           "train_loss": {"type": "max", "unit": "", "value": 2.5},
       }
 

@@ -1,19 +1,12 @@
 #!/bin/bash
 
+SIF_PATH=$1
+IMAGE_NAME=$(basename $SIF_PATH .sif)
+
 # Exit setup if any command fails
 set -e
 
-# If no extra args file is provided, choose last in alphabetical order
-extra_args_file=$1
-if [ -z $extra_args_file ]; then
-    extra_args_file=$(ls -1 ./extra-args/* | tail -n 1)
-fi
-sif=$(cat $extra_args_file | jq -r .sif)
-image_name=$(basename $sif .sif)
-
-echo "Running setup for image $image_name"
-echo
-
+# Create directory for virtual environments
 mkdir -p .virtualenvs
 
 # Set up runner environment
@@ -26,11 +19,9 @@ deactivate
 echo
 
 # Set up container environment
-singularity run -B $PWD $sif bash -c "if [ ! -d .virtualenvs/$image_name ]; then \
-    python3 -m venv .virtualenvs/$image_name --system-site-packages; \
+singularity run -B $PWD $SIF_PATH bash -c "if [ ! -d .virtualenvs/$IMAGE_NAME ]; then \
+    python3 -m venv .virtualenvs/$IMAGE_NAME --system-site-packages; \
     fi; \
-    source .virtualenvs/$image_name/bin/activate; \
+    source .virtualenvs/$IMAGE_NAME/bin/activate; \
     pip install -r requirements/container.txt"
 echo
-
-echo "Setup complete!"

@@ -1,11 +1,9 @@
-name: pytorch-ds-multi-node
-tags: [pytorch, deepspeed, training, multi-gpu, multi-node]
-description: PyTorch multi-node training with DeepSpeed
+name: pytorch-ddp-multi-node
+tags: [pytorch, ddp, training, multi-gpu, multi-node, release]
+description: PyTorch multi-node training using Distributed Data Parallel
 
 job:
   - srun
-  - --account={{ extra_args.account }}
-  - --partition=dev-g
   - --nodes=4
   - --gpus-per-node=8
   - --ntasks-per-node=1
@@ -34,13 +32,10 @@ snippets:
       python3 -m torch.distributed.run \
           --nnodes=$SLURM_NNODES \
           --nproc_per_node=$SLURM_GPUS_PER_NODE \
-          --node_rank $SLURM_PROCID \
           --rdzv-id=$SLURM_JOB_ID \
           --rdzv-backend=c10d \
           --rdzv-endpoint=$RDZV_HOST:$RDZV_PORT \
-          ds_visiontransformer.py \
-          --deepspeed \
-          --deepspeed_config ds_config.json
+          ddp_visiontransformer.py
 
 parse: |
   def parse(text, params):

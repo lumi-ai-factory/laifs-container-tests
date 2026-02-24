@@ -4,8 +4,6 @@ description: PyTorch single-node training with DeepSpeed
 
 job:
   - srun
-  - --account={{ extra_args.account }}
-  - --partition=dev-g
   - --nodes=1
   - --gpus-per-node=8
   - --ntasks-per-node=1

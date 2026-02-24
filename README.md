@@ -13,20 +13,22 @@ typical deep learning workloads.
 
 **This repository contains:**
 
-- **Definition and extra arg files** for running tests on the LUMI supercomputer using the
+- **Job files** for running test jobs on the LUMI supercomputer using the
   [Unframe test runner](https://github.com/viahlgre/unframe) (WIP).
 - **Benchmarks** representative of the typical usage of deep learning libraries:
     - **Benchmark files** for running deep learning workloads.
     - **Source files** listing the origins of all benchmark files obtained from external sources.
     - **Diff files** providing a Git-style summary of any local changes to external benchmark
       files.
+- **Scripts** for running sets of tests as well as tracking and inspecting local changes to
+  external benchmark files.
 
 ---
 
 ## Benchmarks
 
 This section lists currently available benchmarks as well as the sources and licenses of the
-benchmark files. The tests listed for each benchmark can be found under the `definitions`
+benchmark files. The test jobs listed for each benchmark can be found under the `jobs`
 directory.
 
 - [`benchmarks/bitsandbytes`](benchmarks/bitsandbytes)
@@ -73,44 +75,13 @@ python3 scripts/show_color_diff.py benchmarks/pytorch
 
 ## Usage
 
-### Configuring additional test parameters
-
-Certain test parameters, such as the Slurm accounting identifier and path to the image file, are
-passed to the Unframe runner using JSON files stored in the `extra-args` directory.  When
-testing a container image, you should start by writing an extra args file for it. This repository
-includes an extra args file for running the
-`lumi-multitorch-full-u24r64f21m43t29-20260216_093549` image on LUMI, which can be adapted for
-other images and systems.
-
-> [!NOTE]
-> When using the extra args files provided in this repository, change the `account` parameter to
-> your LUMI project identifier.
-
-### Setting up environment
-
-Run `scripts/setup_env.sh` to install dependencies for the test runner and container image. By
-default, the script sets up a virtual environment for the image specified in the extra args file
-that is last in alphabetical order in the `extra-args` directory. Provided the extra args files
-follow the naming scheme of LUMI AIF container image releases, this corresponds to the most recent
-release.
-
-Setting up using the last extra args file in alphabetical order
-```bash
-bash scripts/setup_env.sh
-```
-
-Setting up using a specific extra args file
-```bash
-bash scripts/setup_env.sh extra-args/lumi-multitorch-full-u24r64f21m43t29-20260216_093549.json
-```
-
-### Obtaining non-public data
+### Obtaining data for benchmarks
 
 This section lists any non-public models and datasets required by benchmarks. Some of these files
-might be available system-wide on LUMI, so if you are running the benchmarks on LUMI, you can run
-`scripts/get_data_lumi.sh` to copy these files to the respective benchmark directories. Otherwise,
-you will need to do this manually. Models and datasets used by more than one benchmark should be
-stored under a directory named `data` at the top of the directory tree of this repository.
+might be available system-wide on LUMI. If you are working on LUMI, these files are copied to the
+respective benchmark directories when running `scripts/run_tests.sh`. Otherwise, you will need to
+do this manually. Models and datasets used by more than one benchmark should be stored under a
+directory named `data` at the top of the directory tree of this repository.
 
 - `benchmarks/pytorch`
     - [Tiny ImageNet](https://www.kaggle.com/c/tiny-imagenet) dataset
@@ -124,61 +95,24 @@ stored under a directory named `data` at the top of the directory tree of this r
 
 ### Running tests
 
-Tests are run using the Unframe test runner. Unframe accepts one or more definition files that
-can be used to specify Slurm resource allocations, commands to run, as well as functions to parse
-and validate the obtained results. After following the steps in the
-[previous section](#setting-up-environment), Unframe should be installed in a virtual environment
-located under the `.virtualenvs` directory. Activate the virtual environment to add Unframe to your
-`PATH`.
+Tests are run using the Unframe test runner. Unframe accepts one or more job files that
+can be used to specify Slurm parameters, commands to run, as well as functions to parse
+and validate the obtained results. The `scripts/run_tests.sh` script
+installs dependencies for both the test runner and container image being tested, obtains a Slurm
+allocation, and runs all test jobs. For instance, to test the
+`lumi-multitorch-full-u24r64f21m43t29-20260216_093549` container image, one can run the following
+command (with the placeholder project ID replaced with that of a real LUMI project).
 
 ```bash
-source .virtualenvs/runner/bin/activate
+bash scripts/run_tests.sh \
+    <your-project-id> \
+    /appl/local/laifs/containers/lumi-multitorch-u24r64f21m43t29-20260216_093549/lumi-multitorch-full-u24r64f21m43t29-20260216_093549.sif
 ```
-
-The LUMI AI Factory provides an Lmod environment module for setting some useful environment variables
-on LUMI. The main purpose of the module is bind mounting important directories so that they can be
-accessed inside the container. If you are working on LUMI, load this module. On other systems, you
-can, for example, use the `SINGULARITY_BIND` environment variable to bind the directories you need.
-
-Binding directories on LUMI
-```bash
-module purge
-module use /appl/local/laifs/modules
-module load lumi-aif-singularity-bindings
-```
-
-Binding directories on other systems
-```bash
-export SINGULARITY_BIND=<foo>,<bar>,  # replace with the desired directories
-```
-
-Having completed the previous steps, you are ready to run the tests. Below are a few examples of
-how to use Unframe for this.
-
-Running all tests
-```bash
-unframe --dir definitions \
-    --extra-args-file extra-args/lumi-multitorch-full-u24r64f21m43t29-20260216_093549.json
-```
-
-Running test(s) with the name `transformers-inference-sdpa`
-```bash
-unframe --dir definitions --name transformers-inference-sdpa \
-    --extra-args-file extra-args/lumi-multitorch-full-u24r64f21m43t29-20260216_093549.json
-```
-
-Running test(s) with the tag `transformers`
-```bash
-unframe --dir definitions --tag transformers \
-    --extra-args-file extra-args/lumi-multitorch-full-u24r64f21m43t29-20260216_093549.json
-```
-
-For more information on how to use Unframe, run `unframe --help`.
 
 ### Inspecting results
 
 The results of any tests you run are printed to your terminal. Additionally, Unframe logs the
-results in CSV files, which are by default located under `out/perflogs/generic\:default/`. 
+results in CSV files, which are by default located under `out/perflogs/generic:default/`. 
 
 ---
 
