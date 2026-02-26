@@ -1,0 +1,88 @@
+name: bitsandbytes-inference
+tags: [bitsandbytes, release]
+description: |
+  This test generates tokens using both unquantized and quantized Llama-3.1-8B
+  model. The model is quantized on the fly and then used for inference. The output
+  produced by the unquanitzed model is used to calculate cross entropy loss and
+  perplexity against the quantized model. The generation speed is also validated.
+
+job:
+  - srun
+  - --time 00:15:00
+  - --tasks 1
+  - --gpus-per-task 1
+  - --cpus-per-task 4
+  - singularity
+  - run
+  - -B /pfs
+  - -B /users
+  - -B /scratch
+  - -B /projappl
+  - "{{ extra_args.sif }}"
+  - bash -c
+  - "{{ snippet.script }}"
+
+snippets:
+  - name: script
+    content: |
+      export HF_HOME=$PWD/data/huggingface
+      cd benchmarks/bitsandbytes
+      python bnb_inference.py --model unsloth/Meta-Llama-3.1-8B --bits 8 --tokens 512 --prompt "Hamburg is in which country?\n"
+
+parse: |
+  def parse(text, params):
+      import re
+      def f(p):
+          m = re.search(p, text, re.S | re.M)
+          return float(m.group(1)) if m else None
+
+      def i(p):
+          m = re.search(p, text, re.S | re.M)
+          return int(m.group(1)) if m else None
+
+      def last_gb(p):
+          v = None
+          for m in re.finditer(p, text, re.S | re.M):
+              v = float(m.group(1))
+          return v
+
+      return {
+          "unquant_time_s": f(r"Unquantized generation time:\s*([\d.]+)s"),
+          "unquant_tps": f(r"Unquantized tokens/sec:\s*([\d.]+)"),
+          "quant_time_s": f(r"Quantized generation time:\s*([\d.]+)s"),
+          "quant_tps": f(r"Quantized tokens/sec:\s*([\d.]+)"),
+          "completion_tokens": i(r"Completion tokens:\s*(\d+)"),
+          "xent_loss": f(r"Cross-entropy loss:\s*([\d.]+)"),
+          "perplexity": f(r"Perplexity:\s*([\d.]+)"),
+          "unquant_param_gb": last_gb(r"Unquantized param size:\s*([\d.]+)\s*GB"),
+          "quant_param_gb": last_gb(r"Quantized param size:\s*([\d.]+)\s*GB"),
+      }
+
+validate: |
+  def validate(results, params):
+      # Required fields
+      need = ["unquant_tps", "quant_tps", "xent_loss", "perplexity", "completion_tokens"]
+      missing = [k for k in need if results.get(k) is None]
+      if missing:
+          return (False, "missing fields: " + ", ".join(missing))
+
+      min_unquant_tps = 15.0
+      min_quant_tps   = 5.0
+      max_xent_loss   = 0.5
+      max_perplexity  = 1.7
+      min_tokens      = 25.0
+
+      uq = results["unquant_tps"]
+      q  = results["quant_tps"]
+      xl = results["xent_loss"]
+      pp = results["perplexity"]
+      ct = results["completion_tokens"]
+
+      ok = (uq >= min_unquant_tps) and (q >= min_quant_tps) and (xl <= max_xent_loss) and (pp <= max_perplexity) and (ct >= min_tokens)
+
+      msg = (
+          "min_uq_tps={:.2f}/{}, min_q_tps={:.2f}/{}, max_xent={:.6f}/{}, max_ppl={:.4f}/{}, min_tokens={}/{}"
+      ).format(uq, min_unquant_tps, q, min_quant_tps, xl, max_xent_loss, pp, max_perplexity, ct, min_tokens)
+
+      return (ok, msg)
+

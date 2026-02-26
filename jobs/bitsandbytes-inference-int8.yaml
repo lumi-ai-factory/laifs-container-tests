@@ -23,6 +23,7 @@ snippets:
       export HF_HOME=$PWD/data/huggingface
 
       cd benchmarks/bitsandbytes
+
       python3 inference_benchmark.py \
           LumiOpen/Llama-Poro-2-8B-Base \
           --configs int8 \

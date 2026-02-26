@@ -1,8 +1,12 @@
-name: osu-gpu-node2node-gcd2gcd-bw
-tags: [gpu, mpi, multinode, bandwidth, 2-nodes]
-description: OSU node-to-node GCD-to-GCD pt2pt
-
+name: osu-inter-node-gcd2gcd-bw
+tags: [gpu, mpi, multinode, bandwidth, 2-nodes, release]
+description: |
+  Test MPI bandwidth of GPU-allocated memory transfers between two nodes, using
+  one process per node. All node-to-node and GCD-to-GCD combinations should
+  achieve bandwidth close to the theoretical maximum of the Slingshot
+  interconnect, which is 200 Gbit/s or 25 GB/s.
 params:
+
   rank0_gcd: [0, 1]
   rank1_gcd: [0, 1, 2, 3, 4, 5, 6, 7]
   transfer_size: [1048576, 67108864]
@@ -13,11 +17,8 @@ job:
   - --gpus-per-node 8
   - --ntasks-per-node 1
   - --nodes 2
-  - --partition {{ extra_args.partition }}
-  - --account {{ extra_args.account }}
   - singularity
   - run
-  - -B /boot/config-5.14.21-150500.55.49_13.0.56-cray_shasta_c
   - -B /pfs/lustrep3/users/viahlgre
   - "{{ extra_args.sif }}"
   - bash -c
