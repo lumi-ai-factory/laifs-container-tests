@@ -18,11 +18,12 @@ job:
 snippets:
   - name: script
     content: |
-      source .virtualenvs/$(basename $SINGULARITY_NAME .sif)/bin/activate
-
       export HF_HOME=$PWD/data/huggingface
 
+      source .virtualenvs/$(basename $SINGULARITY_NAME .sif)/bin/activate
+
       cd benchmarks/peft
+
       python3 alora_finetuning.py \
           --base_model mistralai/Mistral-7B-Instruct-v0.3 \
           --data_path Lots-of-LoRAs/task1660_super_glue_question_generation \
@@ -76,8 +77,8 @@ validate: |
               all_ok = False
 
           validate_res[metric] = {
-              "limit": f"{round(limit['value'], 3)}{limit['unit']} ({limit['type']})",
-              "value": f"{round(res, 3)}{limit['unit']}",
+              "limit": f"{round(limit['value'], 3)} {limit['unit']}".strip() + f" ({limit['type']})",
+              "value": f"{round(res, 3)} {limit['unit']}".strip(),
               "status": "pass" if ok else "fail",
           }
 

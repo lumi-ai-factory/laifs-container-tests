@@ -17,11 +17,12 @@ job:
 snippets:
   - name: script
     content: |
-      source .virtualenvs/$(basename $SINGULARITY_NAME .sif)/bin/activate                                
-
       export HF_HOME=$PWD/data/huggingface
 
+      source .virtualenvs/$(basename $SINGULARITY_NAME .sif)/bin/activate
+
       cd benchmarks/transformers
+
       python3 run_benchmarks.py \
           --model-id=LumiOpen/Llama-Poro-2-8B-Base \
           --batch-size=8 \
@@ -82,8 +83,8 @@ validate: |
               all_ok = False
 
           validate_res[metric] = {
-              "limit": f"{round(limit['value'], 2)}{limit['unit']} ({limit['type']})",
-              "value": f"{round(res['value'], 2)}{res['unit']}",
+              "limit": f"{round(limit['value'], 2)} {limit['unit']}".strip() + f" ({limit['type']})",
+              "value": f"{round(res['value'], 2)} {res['unit']}".strip(),
               "status": "pass" if ok else "fail",
           }
 
