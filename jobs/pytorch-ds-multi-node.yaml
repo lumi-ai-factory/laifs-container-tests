@@ -20,6 +20,8 @@ snippets:
     content: |
       # If this is not set, torchrun sets it and prints a warning message
       export OMP_NUM_THREADS=1
+      # Avoid error mentioned in https://github.com/pytorch/pytorch/issues/60477
+      export TMPDIR=$(mktemp -d)
 
       # This would be cleaner with scontrol, but it is not available in the container
       RDZV_HOST="nid$(echo $SLURM_JOB_NODELIST | grep -Eo [0-9]+ | head -n 1)"

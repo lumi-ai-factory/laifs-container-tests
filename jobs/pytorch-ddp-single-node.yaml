@@ -20,6 +20,8 @@ snippets:
     content: |
       # If this is not set, torchrun sets it and prints a warning message
       export OMP_NUM_THREADS=1
+      # Avoid error mentioned in https://github.com/pytorch/pytorch/issues/60477
+      export TMPDIR=$(mktemp -d)
 
       source .virtualenvs/$(basename $SINGULARITY_NAME .sif)/bin/activate
 
