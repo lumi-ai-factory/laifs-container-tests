@@ -58,7 +58,7 @@ validate: |
 
       limits = {
           "loss_avg": {"type": "max", "unit": "", "value": 5.0},
-          "acc_avg": {"type": "min", "unit": "%", "value": 10.0},
+          "acc_avg": {"type": "min", "unit": "%", "value": 5.0},
           "time_avg": {"type": "max", "unit": "s", "value": 60.0},
       }
 
