@@ -3,9 +3,9 @@
 SLURM_ACCOUNT=$1
 SIF_PATH=$2
 
-GIT_COMMIT=$(cat .git/$(cat .git/HEAD | head -n 1 | awk -F " " '{ print $2 }'))
+GIT_COMMIT=$(git describe --always --abbrev=7 --dirty=+)
 
-echo "Test suite commit: ${GIT_COMMIT:0:7}"
+echo "Test suite commit: ${GIT_COMMIT}"
 
 # Get test data on LUMI
 bash scripts/get_lumi_data.sh
