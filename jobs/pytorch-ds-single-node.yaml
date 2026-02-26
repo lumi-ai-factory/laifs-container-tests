@@ -1,5 +1,5 @@
 name: pytorch-ds-single-node
-tags: [pytorch, deepspeed, training, multi-gpu]
+tags: [pytorch, deepspeed, training, multi-gpu, release]
 description: PyTorch single-node training with DeepSpeed
 
 job:

@@ -1,5 +1,5 @@
 name: pytorch-ds-multi-node
-tags: [pytorch, deepspeed, training, multi-gpu, multi-node]
+tags: [pytorch, deepspeed, training, multi-gpu, multi-node, release]
 description: PyTorch multi-node training with DeepSpeed
 
 job:
