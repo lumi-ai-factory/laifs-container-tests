@@ -77,7 +77,7 @@ validate: |
           "load_model_latency": {"type": "max", "unit": "s", "value": 60.0},
           "generate_throughput": {"type": "min", "unit": "samples/s", "value": 50.0},
           "prefill_throughput": {"type": "min", "unit": "samples/s", "value": 2.5},
-          "decode_throughput": {"type": "min", "unit": "samples/s", "value": 75},
+          "decode_throughput": {"type": "min", "unit": "tokens/s", "value": 75},
           "per_token_latency": {"type": "max", "unit": "s", "value": 1.0},
       }
 
