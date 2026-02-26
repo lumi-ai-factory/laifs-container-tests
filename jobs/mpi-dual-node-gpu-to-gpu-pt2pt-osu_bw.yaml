@@ -1,8 +1,12 @@
-name: osu-gpu-gcd2gcd-bw
-tags: [gpu, mpi, single-node, bandwidth]
-description: OSU GCD-to-GCD pt2pt
-
+name: osu-inter-node-gcd2gcd-bw
+tags: [gpu, mpi, multinode, bandwidth, 2-nodes, release]
+description: |
+  Test MPI bandwidth of GPU-allocated memory transfers between two nodes, using
+  one process per node. All node-to-node and GCD-to-GCD combinations should
+  achieve bandwidth close to the theoretical maximum of the Slingshot
+  interconnect, which is 200 Gbit/s or 25 GB/s.
 params:
+
   rank0_gcd: [0, 1]
   rank1_gcd: [0, 1, 2, 3, 4, 5, 6, 7]
   transfer_size: [1048576, 67108864]
@@ -11,14 +15,10 @@ job:
   - srun
   - --mpi=pmi2
   - --gpus-per-node 8
-  - --ntasks 2
-  - --nodes 1
-  - --partition {{ extra_args.partition }}
-  - --account {{ extra_args.account }}
+  - --ntasks-per-node 1
+  - --nodes 2
   - singularity
   - run
-  - -B /boot/config-5.14.21-150500.55.49_13.0.56-cray_shasta_c
-  - -B /pfs/lustrep3/users/viahlgre
   - "{{ extra_args.sif }}"
   - bash -c
   - "{{ snippet.script }}"
@@ -63,50 +63,14 @@ validate: |
       b = params["rank1_gcd"]
       sz = params["transfer_size"]
       bw = results.get("bandwidth_MBps")
-      key = (a, b, sz)
 
       if bw is None:
           return (False, "no bandwidth parsed")
 
-      expected_minimums = {
-          (0,0,67108864): 480000,
-          (0,1,67108864): 50000,
-          (0,2,67108864): 37000,
-          (0,3,67108864): 37000,
-          (0,4,67108864): 37000,
-          (0,5,67108864): 37000,
-          (0,6,67108864): 50000,
-          (0,7,67108864): 37000,
-          
-          (1,0,67108864): 50000,
-          (1,1,67108864): 480000,
-          (1,2,67108864): 37000,
-          (1,3,67108864): 37000,
-          (1,4,67108864): 37000,
-          (1,5,67108864): 37000,
-          (1,6,67108864): 50000,
-          (1,7,67108864): 37000,
-          
-          (0,0,1048576): 50000,
-          (0,1,1048576): 36000,
-          (0,2,1048576): 25000,
-          (0,3,1048576): 25000,
-          (0,4,1048576): 25000,
-          (0,5,1048576): 25000,
-          (0,6,1048576): 25000,
-          (0,7,1048576): 25000,
-          
-          (1,0,1048576): 36000,
-          (1,1,1048576): 50000,
-          (1,2,1048576): 25000,
-          (1,3,1048576): 25000,
-          (1,4,1048576): 25000,
-          (1,5,1048576): 25000,
-          (1,6,1048576): 25000,
-          (1,7,1048576): 25000,
-      }
-
-      threshold = expected_minimums.get(key)
+      # Slingshot 11 is 200 gbit/s per nic, which in MB/s is:
+      # ((200 * 1000) mbit/s) / (8 bits per byte) = 25000 MB/s
+      # With 5% overhead: 25000 MB/s * 0.95 = 23750 MB/s
+      threshold = 23750
 
       ok = bw >= threshold
       msg = "min={} MB/s, got {:.1f} MB/s".format(threshold, bw)

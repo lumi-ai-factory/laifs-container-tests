@@ -1,0 +1,57 @@
+name: accelerate-big-model-inference
+tags: [accelerate, release]
+description: |
+  This test uses the accelerate library and the example big_model_inference.py
+  script. The test validates model loading time and average token generation speed.
+
+job:
+  - srun
+  - --time 00:15:00
+  - --nodes 1
+  - --tasks 1
+  - --gpus-per-node 1
+  - --cpus-per-task 8
+  - singularity
+  - run
+  - "{{ extra_args.sif }}"
+  - bash -c
+  - "{{ snippet.script }}"
+
+snippets:
+  - name: script
+    content: |
+      export HF_HOME=$PWD/data/huggingface
+      cd benchmarks/accelerate
+      python3 big_model_inference.py opt
+
+parse: |
+  def parse(text, params):
+      import re
+      def f(p):
+          m = re.search(p, text, re.S)
+          return float(m.group(1)) if m else None
+
+      return {
+          "model_loading_time_s": f(r"Model loading:.*?Time:\s*([\d.]+)s"),
+          "avg_generation_time_per_token_s": f(r"Average time of generation per token:\s*([\d.]+)s"),
+      }
+
+validate: |
+  def validate(results, params):
+      load_t = results.get("model_loading_time_s")
+      tok_t = results.get("avg_generation_time_per_token_s")
+
+      if load_t is None:
+          return (False, "no model loading time parsed")
+      if tok_t is None:
+          return (False, "no avg generation time/token parsed")
+
+      # Params not required per your note; defaults are conservative.
+      max_load_s = params.get("max_model_loading_time_s", 300)
+      max_tok_s  = params.get("max_avg_generation_time_per_token_s", 0.2)
+
+      ok = (load_t <= max_load_s) and (tok_t <= max_tok_s)
+      msg = "max_load={}s got {:.2f}s; max_tok={}s got {:.3f}s".format(
+          max_load_s, load_t, max_tok_s, tok_t
+      )
+      return (ok, msg)

@@ -7,7 +7,6 @@ job:
   - --gpus-per-node=1
   - --ntasks-per-node=1
   - --cpus-per-task=7
-  - --mem-per-gpu=60G
   - --time=00:30:00
   - singularity
   - run
@@ -23,6 +22,7 @@ snippets:
       export HF_HOME=$PWD/data/huggingface
 
       cd benchmarks/bitsandbytes
+
       python3 inference_benchmark.py \
           LumiOpen/Llama-Poro-2-8B-Base \
           --configs int8 \

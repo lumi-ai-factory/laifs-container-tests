@@ -8,7 +8,6 @@ job:
   - --gpus-per-node=8
   - --ntasks-per-node=1
   - --cpus-per-task=56
-  - --mem-per-gpu=60G
   - --time=00:30:00
   - singularity
   - run

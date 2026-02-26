@@ -7,8 +7,8 @@ job:
   - --gpus-per-node=1
   - --ntasks-per-node=1
   - --cpus-per-task=7
-  - --mem-per-gpu=60G
   - --time=00:30:00
+  - --nodes=1
   - singularity
   - run
   - "{{ extra_args.sif }}"

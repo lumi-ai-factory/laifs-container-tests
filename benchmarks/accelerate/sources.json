@@ -1,0 +1,4 @@
+{
+    "big_model_inference.py": "https://raw.githubusercontent.com/huggingface/accelerate/ae36c7441db40808422f31d3e792e69a3abf0a20/benchmarks/big_model_inference/big_model_inference.py",
+    "measures_util.py": "https://raw.githubusercontent.com/huggingface/accelerate/ae36c7441db40808422f31d3e792e69a3abf0a20/benchmarks/big_model_inference/measures_util.py"
+}
