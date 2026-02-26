@@ -101,4 +101,4 @@ validate: |
               "status": "pass" if ok else "fail",
           }
 
-      return (all_ok, json.dumps(validate_res))
+      return (all_ok, "results:\n```\n" + json.dumps(validate_res, indent=4) + "\n```")
