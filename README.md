@@ -66,8 +66,7 @@ directory.
             - License: [Attribution 4.0 International](https://github.com/Lumi-supercomputer/LUMI-AI-Guide/blob/main/LICENSE)
 - Transformers
     - Tests:
-        - `transformers-inference-sdpa`
-        - `transformers-inference-fa2`
+        - `transformers-inference`
     - Sources:
         - [huggingface/transformers](https://github.com/huggingface/transformers/tree/main)
             - License: [Apache License 2.0](https://github.com/huggingface/transformers/blob/main/LICENSE)

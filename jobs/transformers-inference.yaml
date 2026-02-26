@@ -1,13 +1,16 @@
-name: transformers-inference-fa2
+name: transformers-inference
 tags: [transformers, flash-attention, inference, release]
-description: Transformers inference with Flash Attention 2
+description: Transformers inference with different attention implementations
+
+params:
+  attn_implementation: [sdpa, flash_attention_2]
 
 job:
   - srun
   - --gpus-per-node=1
   - --ntasks-per-node=1
   - --cpus-per-task=7
-  - --time=00:30:00
+  - --time=00:15:00
   - singularity
   - run
   - "{{ extra_args.sif }}"
@@ -28,7 +31,7 @@ snippets:
           --batch-size=8 \
           --sequence-length=128 \
           --num-tokens-to-generate=128 \
-          --config-file=config_fa2.json \
+          --config-file=config_${attn_implementation}.json \
           --commit-id=556312c \
           --no-gpu-monitoring
 
@@ -43,7 +46,8 @@ parse: |
           "Throughput": "throughput",
       }
 
-      results = {}
+      results = {"attn_implementation": params["attn_implementation"]}
+
       for key, val in metrics.items():
           match = re.search(fr"{key}.+avg=(\d+\.?\d*)([^\s]+)", text)
           if match:
@@ -69,7 +73,7 @@ validate: |
       }
 
       all_ok = True
-      validate_res = {}
+      validate_res = {"attn_implementation": params["attn_implementation"]}
 
       for metric, limit in limits.items():
           res = results[metric]
