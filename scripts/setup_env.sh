@@ -14,7 +14,7 @@ if [ ! -d .virtualenvs/runner ]; then
     python3 -m venv .virtualenvs/runner
 fi
 source .virtualenvs/runner/bin/activate
-pip install -U pip -r requirements/runner.txt
+pip install -U pip --force-reinstall -r requirements/runner.txt
 deactivate
 echo
 
