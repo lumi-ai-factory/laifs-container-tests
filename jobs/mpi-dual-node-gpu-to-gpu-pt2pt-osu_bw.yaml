@@ -19,7 +19,6 @@ job:
   - --nodes 2
   - singularity
   - run
-  - -B /pfs/lustrep3/users/viahlgre
   - "{{ extra_args.sif }}"
   - bash -c
   - "{{ snippet.script }}"

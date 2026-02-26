@@ -6,8 +6,8 @@ job:
   - srun
   - --gpus-per-node=1
   - --ntasks-per-node=1
+  - --gpus-per-node=1
   - --cpus-per-task=7
-  - --mem-per-gpu=60G
   - --time=00:30:00
   - singularity
   - run
