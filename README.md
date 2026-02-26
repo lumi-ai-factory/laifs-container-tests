@@ -27,35 +27,54 @@ typical deep learning workloads.
 
 ## Benchmarks
 
-This section lists currently available benchmarks as well as the sources and licenses of the
+This section lists currently available benchmarks as well as the sources and licenses of any
 benchmark files. The test jobs listed for each benchmark can be found under the `jobs`
 directory.
 
-- [`benchmarks/bitsandbytes`](benchmarks/bitsandbytes)
+- Accelerate
     - Tests:
+        - `accelerate-big-model-inference`
+    - Sources:
+        - [huggingface/accelerate](https://github.com/huggingface/accelerate)
+            - License: [Apache License 2.0](https://github.com/huggingface/accelerate/blob/main/LICENSE)
+- BitsAndBytes
+    - Tests:
+        - `bitsandbytes-inference`
         - `bitsandbytes-inference-int8`
-    - Source: [bitsandbytes-foundation/bitsandbytes](https://github.com/bitsandbytes-foundation/bitsandbytes)
-    - License: [MIT License](https://github.com/bitsandbytes-foundation/bitsandbytes/blob/main/LICENSE)
-- [`benchmarks/peft`](benchmarks/peft)
+    - Sources:
+        - [bitsandbytes-foundation/bitsandbytes](https://github.com/bitsandbytes-foundation/bitsandbytes)
+            - License: [MIT License](https://github.com/bitsandbytes-foundation/bitsandbytes/blob/main/LICENSE)
+- MPI
+    - Tests:
+        - `osu-intra-node-gcd2gcd-bw`
+        - `osu-inter-node-gcd2gcd-bw`
+- PEFT
     - Tests:
         - `peft-alora-finetuning`
-    - Source: [huggingface/peft](https://github.com/huggingface/peft)
-    - License: [Apache License 2.0](https://github.com/lumi-ai-factory/laifs-container-tests/tree/mai://github.com/huggingface/peft/blob/main/LICENSE)
-- [`benchmarks/pytorch`](benchmarks/pytorch)
+    - Sources:
+        - [huggingface/peft](https://github.com/huggingface/peft)
+            - License: [Apache License 2.0](https://github.com/lumi-ai-factory/laifs-container-tests/tree/mai://github.com/huggingface/peft/blob/main/LICENSE)
+- PyTorch
     - Tests:
         - `pytorch-single-gpu`
         - `pytorch-ddp-single-node`
         - `pytorch-ddp-multi-node`
         - `pytorch-ds-single-node`
         - `pytorch-ds-multi-node`
-    - Source: [Lumi-supercomputer/LUMI-AI-Guide](https://github.com/Lumi-supercomputer/LUMI-AI-Guide)
-    - License: [Attribution 4.0 International](https://github.com/Lumi-supercomputer/LUMI-AI-Guide/blob/main/LICENSE)
-- [`benchmarks/transformers`](benchmarks/transformers)
+    - Sources:
+        - [Lumi-supercomputer/LUMI-AI-Guide](https://github.com/Lumi-supercomputer/LUMI-AI-Guide)
+            - License: [Attribution 4.0 International](https://github.com/Lumi-supercomputer/LUMI-AI-Guide/blob/main/LICENSE)
+- Transformers
     - Tests:
         - `transformers-inference-sdpa`
         - `transformers-inference-fa2`
-    - Source: [huggingface/transformers](https://github.com/huggingface/transformers/tree/main)
-    - License: [Apache License 2.0](https://github.com/huggingface/transformers/blob/main/LICENSE)
+    - Sources:
+        - [huggingface/transformers](https://github.com/huggingface/transformers/tree/main)
+            - License: [Apache License 2.0](https://github.com/huggingface/transformers/blob/main/LICENSE)
+- vLLM
+    - Tests:
+        - `vllm-bench-single-gpu-llama31-8b`
+        - `vllm-bench-full-node-gpt-oss-120b`
 
 For more detailed information, see the `sources.json` and `diff.txt` files included in each
 benchmark directory. The `sources.json` file contains permalinks to all files obtained from an
