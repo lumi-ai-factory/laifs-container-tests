@@ -3,8 +3,10 @@
 SLURM_ACCOUNT=$1
 SIF_PATH=$2
 
+GIT_URL="https://github.com/lumi-ai-factory/laifs-container-tests"
 GIT_COMMIT=$(git describe --always --abbrev=7 --dirty=+)
 
+echo "Test suite URL: ${GIT_URL}"
 echo "Test suite commit: ${GIT_COMMIT}"
 
 # Get test data on LUMI
