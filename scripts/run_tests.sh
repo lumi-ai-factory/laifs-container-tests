@@ -20,4 +20,4 @@ salloc --quiet \
     --exclusive \
     --nodes=4 \
     --time 03:00:00 \
-    bash scripts/runner.sh $SIF_PATH
+    bash scripts/test_runner.sh $SIF_PATH
