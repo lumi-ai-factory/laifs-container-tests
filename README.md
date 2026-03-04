@@ -75,18 +75,15 @@ directory.
         - `vllm-bench-single-gpu-llama31-8b`
         - `vllm-bench-full-node-gpt-oss-120b`
 
-For more detailed information, see the `sources.json` and `diff.txt` files included in each
+For more detailed information, see the `sources.json` and `changes.diff` files included in each
 benchmark directory. The `sources.json` file contains permalinks to all files obtained from an
-external source, while any changes made to those files can be viewed in the `diff.txt` file.
+external source, while any changes made to those files can be viewed in the `changes.diff` file.
+If you want to view the diff files with syntax highlighting, you can use, for example, the
+[Pygments CLI](https://pygments.org/docs/cmdline/).
 
 Updating diff files
 ```bash
 python3 scripts/get_diffs.py
-```
-
-Showing diff for a particular benchmark
-```bash
-python3 scripts/show_color_diff.py benchmarks/pytorch
 ```
 
 ---

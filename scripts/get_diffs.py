@@ -12,7 +12,7 @@ def main():
     print("Getting diffs...")
     for bench_dir in benches_dir.iterdir():
         source_file = bench_dir / "sources.json"
-        diff_file = bench_dir / "diff.txt"
+        diff_file = bench_dir / "changes.diff"
         old_diff = None
         new_diff = None
 
