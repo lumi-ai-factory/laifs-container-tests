@@ -75,9 +75,9 @@ directory.
         - `vllm-bench-single-gpu-llama31-8b`
         - `vllm-bench-full-node-gpt-oss-120b`
 
-For more detailed information, see the `sources.json` and `changes.diff` files included in each
-benchmark directory. The `sources.json` file contains permalinks to all files obtained from an
-external source, while any changes made to those files can be viewed in the `changes.diff` file.
+For more detailed information, see the `ext.json` and `ext.diff` files included in each
+benchmark directory. The `ext.json` file contains permalinks to all files obtained from an
+external source, while any changes made to those files can be viewed in the `ext.diff` file.
 If you want to view the diff files with syntax highlighting, you can use, for example, the
 [Pygments CLI](https://pygments.org/docs/cmdline/).
 
