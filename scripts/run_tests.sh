@@ -21,8 +21,8 @@ fi
 
 # Obtain Slurm allocation and run test jobs
 salloc --quiet \
-    --account=$SLURM_PARTITION \
-    --partition=standard-g \
+    --account=$SLURM_ACCOUNT \
+    --partition=$SLURM_PARTITION \
     --exclusive \
     --nodes=4 \
     --time 03:00:00 \
