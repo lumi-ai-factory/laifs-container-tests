@@ -15,9 +15,13 @@ bash scripts/get_lumi_data.sh
 # Install dependencies for runner and container
 bash scripts/setup_env.sh $SIF_PATH > /dev/null 2>&1
 
+if [[ -z "$SLURM_PARTITION" ]]; then
+    SLURM_PARTITION="standard-g"
+fi
+
 # Obtain Slurm allocation and run test jobs
 salloc --quiet \
-    --account=$SLURM_ACCOUNT \
+    --account=$SLURM_PARTITION \
     --partition=standard-g \
     --exclusive \
     --nodes=4 \
