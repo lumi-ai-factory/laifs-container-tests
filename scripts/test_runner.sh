@@ -3,7 +3,7 @@
 SIF_PATH=$1
 
 module --quiet purge
-module load Local-LAIF lumi-aif-singularity-bindings
+module --quiet load Local-LAIF lumi-aif-singularity-bindings
 
 source .virtualenvs/runner/bin/activate
 

@@ -2,12 +2,23 @@
 
 SLURM_ACCOUNT=$1
 SIF_PATH=$2
+RELEASE_NAME=$3
+
+IMAGE_NAME=$(basename $SIF_PATH .sif)
+SYSTEM_NAME=$(scontrol show config | awk '/ClusterName/ {print $3}')
 
 GIT_URL="https://github.com/lumi-ai-factory/laifs-container-tests"
 GIT_COMMIT=$(git describe --always --abbrev=7 --dirty=+)
 
-echo "Test suite URL: ${GIT_URL}"
-echo "Test suite commit: ${GIT_COMMIT}"
+cat << EOF
+# Results of automated tests for $RELEASE_NAME
+
+Image: $IMAGE_NAME
+System: $SYSTEM_NAME
+Test suite URL: $GIT_URL
+Test suite commit: $GIT_COMMIT
+
+EOF
 
 # Get test data on LUMI
 bash scripts/get_lumi_data.sh
