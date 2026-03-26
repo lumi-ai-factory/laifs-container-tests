@@ -1,4 +1,4 @@
-name: pytorch-single-gpu
+name: pytorch-singlegpu
 tags: [pytorch, training, release]
 description: PyTorch single-GPU training
 

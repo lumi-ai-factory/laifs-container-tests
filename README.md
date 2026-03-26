@@ -56,11 +56,15 @@ directory.
             - License: [Apache License 2.0](https://github.com/lumi-ai-factory/laifs-container-tests/tree/mai://github.com/huggingface/peft/blob/main/LICENSE)
 - PyTorch
     - Tests:
-        - `pytorch-single-gpu`
-        - `pytorch-ddp-single-node`
-        - `pytorch-ddp-multi-node`
-        - `pytorch-ds-single-node`
-        - `pytorch-ds-multi-node`
+        - `pytorch-singlegpu`
+        - `pytorch-ddp-singlenode-srun`
+        - `pytorch-ddp-singlenode-torchrun`
+        - `pytorch-ddp-multinode-srun`
+        - `pytorch-ddp-multinode-torchrun`
+        - `pytorch-ds-singlenode-srun`
+        - `pytorch-ds-singlenode-torchrun`
+        - `pytorch-ds-multinode-srun`
+        - `pytorch-ds-multinode-torchrun`
     - Sources:
         - [Lumi-supercomputer/LUMI-AI-Guide](https://github.com/Lumi-supercomputer/LUMI-AI-Guide)
             - License: [Attribution 4.0 International](https://github.com/Lumi-supercomputer/LUMI-AI-Guide/blob/main/LICENSE)

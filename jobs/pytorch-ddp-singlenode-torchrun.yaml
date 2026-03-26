@@ -1,6 +1,6 @@
-name: pytorch-ddp-single-node
-tags: [pytorch, ddp, training, multi-gpu, release]
-description: PyTorch single-node training using Distributed Data Parallel
+name: pytorch-ddp-singlenode-torchrun
+tags: [pytorch, ddp, training, multi-gpu, torchrun, release]
+description: PyTorch single-node training using Distributed Data Parallel and torchrun
 
 job:
   - srun
@@ -18,10 +18,11 @@ job:
 snippets:
   - name: script
     content: |
-      # If this is not set, torchrun sets it and prints a warning message
-      export OMP_NUM_THREADS=1
       # Avoid error mentioned in https://github.com/pytorch/pytorch/issues/60477
       export TMPDIR=$(mktemp -d)
+
+      # If this is not set, torchrun sets it and prints a warning message
+      export OMP_NUM_THREADS=1
 
       source .virtualenvs/$(basename $SINGULARITY_NAME .sif)/bin/activate
 
@@ -29,7 +30,7 @@ snippets:
 
       python3 -m torch.distributed.run \
           --standalone \
-          --nnodes=$SLURM_NNODES \
+          --nnodes=$SLURM_JOB_NUM_NODES \
           --nproc_per_node=$SLURM_GPUS_PER_NODE \
           ddp_visiontransformer.py
 
