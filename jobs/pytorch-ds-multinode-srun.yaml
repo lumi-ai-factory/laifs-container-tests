@@ -22,7 +22,7 @@ snippets:
       export TMPDIR=$(mktemp -d)
 
       # This would be cleaner with scontrol, but it is not available in the container
-      export MASTER_ADDR="nid$(echo $SLURM_JOB_NODELIST | grep -Eo [0-9]+ | head -n 1)"
+      export MASTER_ADDR="nid$(echo $SLURM_STEP_NODELIST | grep -Eo [0-9]+ | head -n 1)"
       # Set master port using job ID, as the default port may be in use
       export MASTER_PORT="1${SLURM_JOB_ID:0-4}"
 

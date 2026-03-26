@@ -30,7 +30,7 @@ snippets:
 
       python3 -m torch.distributed.run \
           --standalone \
-          --nnodes=$SLURM_JOB_NUM_NODES \
+          --nnodes=$SLURM_STEP_NUM_NODES \
           --nproc_per_node=$SLURM_GPUS_PER_NODE \
           ddp_visiontransformer.py
 
