@@ -1,4 +1,9 @@
+*.log
+*.out
+
+__pycache__/
+core
+
 /.virtualenvs/
 /data/
 /out/
-__pycache__/
