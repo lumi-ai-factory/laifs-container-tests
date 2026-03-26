@@ -20,8 +20,6 @@ snippets:
     content: |
       # Avoid error mentioned in https://github.com/pytorch/pytorch/issues/60477
       export TMPDIR=$(mktemp -d)
-      # Avoid error mention in https://github.com/lumi-ai-factory/laifs-container-recipes/issues/20
-      export CUDA_LAUNCH_BLOCKING=1
 
       # If this is not set, torchrun sets it and prints a warning message
       export OMP_NUM_THREADS=1
