@@ -21,8 +21,6 @@ snippets:
     content: |
       # Avoid error mentioned in https://github.com/pytorch/pytorch/issues/60477
       export TMPDIR=$(mktemp -d)
-      # Avoid error mention in https://github.com/lumi-ai-factory/laifs-container-recipes/issues/20
-      export CUDA_LAUNCH_BLOCKING=1
 
       # This would be cleaner with scontrol, but it is not available in the container
       export MASTER_ADDR="nid$(echo $SLURM_STEP_NODELIST | grep -Eo [0-9]+ | head -n 1)"
