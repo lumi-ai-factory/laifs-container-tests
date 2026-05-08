@@ -4,7 +4,7 @@ description: PyTorch single-GPU training
 
 job:
   - srun
-  - --gpus-per-node=1
+  - --nodes=1
   - --ntasks-per-node=1
   - --gpus-per-node=1
   - --cpus-per-task=7
