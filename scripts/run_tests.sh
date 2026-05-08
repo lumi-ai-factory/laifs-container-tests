@@ -49,11 +49,11 @@ fi
 mkdir -p .virtualenvs
 
 # Unframe
-if [ ! -d .virtualenvs/runner ]; then
-    python3.11 -m venv .virtualenvs/runner
+if [ ! -d .virtualenvs/unframe ]; then
+    python3.11 -m venv .virtualenvs/unframe
 fi
 .virtualenvs/unframe/bin/pip install \
-    -U pip --force-reinstall -r requirements/runner.txt > /dev/null 2>&1
+    -U pip --force-reinstall -r requirements/unframe.txt > /dev/null 2>&1
 
 # Container
 singularity run -B=$PWD $SIF_PATH bash -c "if [ ! -d .virtualenvs/$IMAGE_NAME ]; then \
