@@ -67,11 +67,17 @@ singularity run -B=$PWD $SIF_PATH bash -c "if [ ! -d .virtualenvs/$IMAGE_NAME ];
 
 module --quiet purge && module --quiet load Local-LAIF lumi-aif-singularity-bindings
 
+if [[ $SLURM_PARTITION == dev-g ]]; then
+    JOB_TIMELIMIT=02:00:00
+else
+    JOB_TIMELIMIT=03:00:00
+fi
+
 salloc --quiet \
     --account=$SLURM_ACCOUNT \
     --partition=$SLURM_PARTITION \
     --exclusive \
     --nodes=4 \
-    --time 03:00:00 \
+    --time $JOB_TIMELIMIT \
     .virtualenvs/unframe/bin/unframe \
         --dir jobs --tag release --extra-args "{\"sif\": \"${SIF_PATH}\"}"
