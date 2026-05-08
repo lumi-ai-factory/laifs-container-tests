@@ -11,7 +11,7 @@ mkdir -p .virtualenvs
 
 # Set up runner environment
 if [ ! -d .virtualenvs/runner ]; then
-    python3 -m venv .virtualenvs/runner
+    python3.11 -m venv .virtualenvs/runner
 fi
 .virtualenvs/runner/bin/pip install \
     -U pip --force-reinstall -r requirements/runner.txt
