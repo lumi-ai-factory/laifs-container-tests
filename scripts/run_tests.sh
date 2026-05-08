@@ -5,6 +5,7 @@ set -e  # Exit if any command fails
 SLURM_ACCOUNT=$1
 SIF_PATH=$2
 RELEASE_NAME=$3
+UNFRAME_TAG=${4:-release}
 
 # Default to 'standard-g' partition
 if [[ -z "$SLURM_PARTITION" ]]; then
@@ -80,4 +81,4 @@ salloc --quiet \
     --nodes=4 \
     --time $JOB_TIMELIMIT \
     .virtualenvs/unframe/bin/unframe \
-        --dir jobs --tag release --extra-args "{\"sif\": \"${SIF_PATH}\"}"
+        --dir jobs --tag $UNFRAME_TAG --extra-args "{\"sif\": \"${SIF_PATH}\"}"
