@@ -18,7 +18,7 @@ fi
 echo
 
 # Set up container environment
-singularity run -B $PWD $SIF_PATH bash -c "if [ ! -d .virtualenvs/$IMAGE_NAME ]; then \
+singularity run -B=$PWD $SIF_PATH bash -c "if [ ! -d .virtualenvs/$IMAGE_NAME ]; then \
     python3 -m venv .virtualenvs/$IMAGE_NAME --system-site-packages; \
     fi; \
     .virtualenvs/$IMAGE_NAME/bin/pip install -r requirements/container.txt"
