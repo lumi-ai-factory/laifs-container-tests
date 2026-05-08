@@ -22,8 +22,16 @@ Test suite commit: $GIT_COMMIT
 
 EOF
 
-# Get test data on LUMI
-bash scripts/get_lumi_data.sh
+#
+# Get ImageNet training data for LUMI AI guide PyTorch examples
+#
+
+IMAGENET_SOURCE=/appl/local/training/LUMI-AI-Guide/tiny-imagenet-dataset.hdf5
+IMAGENET_TARGET=benchmarks/pytorch/train_images.hdf5
+
+if [ -f $IMAGENET_SOURCE ] && [ ! -f $IMAGENET_TARGET ]; then
+    cp $IMAGENET_SOURCE $IMAGENET_TARGET
+fi
 
 #
 # Setup virtual environments
