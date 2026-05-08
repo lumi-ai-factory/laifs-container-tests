@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e  # Exit if any command fails
+
 SLURM_ACCOUNT=$1
 SIF_PATH=$2
 RELEASE_NAME=$3
@@ -23,8 +25,24 @@ EOF
 # Get test data on LUMI
 bash scripts/get_lumi_data.sh
 
-# Install dependencies for runner and container
-bash scripts/setup_env.sh $SIF_PATH > /dev/null 2>&1
+#
+# Setup virtual environments
+#
+
+mkdir -p .virtualenvs
+
+# Unframe
+if [ ! -d .virtualenvs/runner ]; then
+    python3.11 -m venv .virtualenvs/runner
+fi
+.virtualenvs/unframe/bin/pip install \
+    -U pip --force-reinstall -r requirements/runner.txt > /dev/null 2>&1
+
+# Container
+singularity run -B=$PWD $SIF_PATH bash -c "if [ ! -d .virtualenvs/$IMAGE_NAME ]; then \
+    python3 -m venv .virtualenvs/$IMAGE_NAME --system-site-packages; \
+    fi; \
+    .virtualenvs/$IMAGE_NAME/bin/pip install -r requirements/container.txt > /dev/null 2>&1"
 
 if [[ -z "$SLURM_PARTITION" ]]; then
     SLURM_PARTITION="standard-g"
