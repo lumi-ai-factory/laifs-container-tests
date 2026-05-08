@@ -2,9 +2,7 @@
 
 SIF_PATH=$1
 
-module --quiet purge
-module --quiet load Local-LAIF lumi-aif-singularity-bindings
+module --quiet purge && module --quiet load Local-LAIF lumi-aif-singularity-bindings
 
-source .virtualenvs/runner/bin/activate
-
-unframe --dir jobs --tag release --extra-args "{\"sif\": \"${SIF_PATH}\"}"
+.virtualenvs/unframe/bin/unframe \
+    --dir jobs --tag release --extra-args "{\"sif\": \"${SIF_PATH}\"}"
