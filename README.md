@@ -14,7 +14,7 @@ typical deep learning workloads.
 **This repository contains:**
 
 - **Job files** for running test jobs on the LUMI supercomputer using the
-  [Unframe test runner](https://github.com/viahlgre/unframe) (WIP).
+  [Unframe test runner](https://github.com/lumi-ai-factory/unframe) (WIP).
 - **Benchmarks** representative of the typical usage of deep learning libraries:
     - **Benchmark files** for running deep learning workloads.
     - **Source files** listing the origins of all benchmark files obtained from external sources.
