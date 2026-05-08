@@ -20,8 +20,8 @@ typical deep learning workloads.
     - **Source files** listing the origins of all benchmark files obtained from external sources.
     - **Diff files** providing a Git-style summary of any local changes to external benchmark
       files.
-- **Scripts** for running sets of tests as well as tracking and inspecting local changes to
-  external benchmark files.
+- **Scripts** for running sets of tests as well as tracking local changes to external benchmark
+  files.
 
 ---
 
@@ -118,14 +118,15 @@ Tests are run using the Unframe test runner. Unframe accepts one or more job fil
 can be used to specify Slurm parameters, commands to run, as well as functions to parse
 and validate the obtained results. The `scripts/run_tests.sh` script
 installs dependencies for both the test runner and container image being tested, obtains a Slurm
-allocation, and runs all test jobs. For instance, to test the
-`lumi-multitorch-full-u24r64f21m43t29-20260216_093549` container image, one can run the following
-command (with the placeholder project ID replaced with that of a real LUMI project).
+allocation, and runs all test jobs. For instance, to test the latest released container image, one
+can run the following command (with the placeholder project ID replaced with that of a real LUMI
+project).
 
 ```bash
 bash scripts/run_tests.sh \
     <your-project-id> \
-    /appl/local/laifs/containers/lumi-multitorch-u24r64f21m43t29-20260216_093549/lumi-multitorch-full-u24r64f21m43t29-20260216_093549.sif
+    /appl/local/laifs/containers/lumi-multitorch-latest.sif \
+    lumi-multitorch-latest
 ```
 
 ### Inspecting results
