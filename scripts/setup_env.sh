@@ -10,11 +10,11 @@ set -e
 mkdir -p .virtualenvs
 
 # Set up runner environment
-if [ ! -d .virtualenvs/runner ]; then
-    python3.11 -m venv .virtualenvs/runner
+if [ ! -d .virtualenvs/unframe ]; then
+    python3.11 -m venv .virtualenvs/unframe
 fi
-.virtualenvs/runner/bin/pip install \
-    -U pip --force-reinstall -r requirements/runner.txt
+.virtualenvs/unframe/bin/pip install \
+    -U pip --force-reinstall -r requirements/unframe.txt
 echo
 
 # Set up container environment
