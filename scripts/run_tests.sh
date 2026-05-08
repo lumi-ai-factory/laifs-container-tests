@@ -56,11 +56,17 @@ if [[ -z "$SLURM_PARTITION" ]]; then
     SLURM_PARTITION="standard-g"
 fi
 
-# Obtain Slurm allocation and run test jobs
+#
+# Run tests
+#
+
+module --quiet purge && module --quiet load Local-LAIF lumi-aif-singularity-bindings
+
 salloc --quiet \
     --account=$SLURM_ACCOUNT \
     --partition=$SLURM_PARTITION \
     --exclusive \
     --nodes=4 \
     --time 03:00:00 \
-    bash scripts/test_runner.sh $SIF_PATH
+    .virtualenvs/unframe/bin/unframe \
+        --dir jobs --tag release --extra-args "{\"sif\": \"${SIF_PATH}\"}"
