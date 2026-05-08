@@ -6,6 +6,15 @@ SLURM_ACCOUNT=$1
 SIF_PATH=$2
 RELEASE_NAME=$3
 
+# Default to 'standard-g' partition
+if [[ -z "$SLURM_PARTITION" ]]; then
+    SLURM_PARTITION="standard-g"
+fi
+
+#
+# Print test header
+#
+
 IMAGE_NAME=$(basename $SIF_PATH .sif)
 SYSTEM_NAME=$(scontrol show config | awk '/ClusterName/ {print $3}')
 
@@ -51,10 +60,6 @@ singularity run -B=$PWD $SIF_PATH bash -c "if [ ! -d .virtualenvs/$IMAGE_NAME ];
     python3 -m venv .virtualenvs/$IMAGE_NAME --system-site-packages; \
     fi; \
     .virtualenvs/$IMAGE_NAME/bin/pip install -r requirements/container.txt > /dev/null 2>&1"
-
-if [[ -z "$SLURM_PARTITION" ]]; then
-    SLURM_PARTITION="standard-g"
-fi
 
 #
 # Run tests
