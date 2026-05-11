@@ -131,8 +131,9 @@ bash scripts/run_tests.sh \
 
 ### Inspecting results
 
-The results of any tests you run are printed to your terminal. Additionally, Unframe logs the
-results in CSV files, which are by default located under `out/perflogs/generic:default/`. 
+The parsed and validated results of any tests you run are printed to your terminal as part of a
+test report. The test results as well as job standard output and error streams are also logged
+separately under `out/`.
 
 ---
 
