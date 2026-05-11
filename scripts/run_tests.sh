@@ -81,4 +81,4 @@ salloc --quiet \
     --nodes=4 \
     --time $JOB_TIMELIMIT \
     .virtualenvs/unframe/bin/unframe \
-        --dir jobs --tag $UNFRAME_TAG --extra-args "{\"sif\": \"${SIF_PATH}\"}"
+        --dir unframe --tag $UNFRAME_TAG --extra-args "{\"sif\": \"${SIF_PATH}\"}"

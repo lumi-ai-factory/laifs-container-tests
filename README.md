@@ -13,7 +13,7 @@ typical deep learning workloads.
 
 **This repository contains:**
 
-- **Job files** for running test jobs on the LUMI supercomputer using the
+- **Unframe test files** for running tests on the LUMI supercomputer using the
   [Unframe test runner](https://github.com/lumi-ai-factory/unframe) (WIP).
 - **Benchmarks** representative of the typical usage of deep learning libraries:
     - **Benchmark files** for running deep learning workloads.
@@ -28,8 +28,8 @@ typical deep learning workloads.
 ## Benchmarks
 
 This section lists currently available benchmarks as well as the sources and licenses of any
-benchmark files. The test jobs listed for each benchmark can be found under the `jobs`
-directory.
+benchmark files. The Unframe tests listed for each benchmark can be found under the
+`unframe` directory.
 
 - Accelerate
     - Tests:
@@ -114,11 +114,11 @@ directory named `data` at the top of the directory tree of this repository.
 
 ### Running tests
 
-Tests are run using the Unframe test runner. Unframe accepts one or more job files that
+Tests are run using the Unframe test runner. Unframe accepts one or more test files that
 can be used to specify Slurm parameters, commands to run, as well as functions to parse
 and validate the obtained results. The `scripts/run_tests.sh` script
 installs dependencies for both the test runner and container image being tested, obtains a Slurm
-allocation, and runs all test jobs. For instance, to test the latest released container image, one
+allocation, and runs all tests. For instance, to test the latest released container image, one
 can run the following command (with the placeholder project ID replaced with that of a real LUMI
 project).
 
