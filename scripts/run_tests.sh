@@ -54,19 +54,19 @@ if [ ! -d .virtualenvs/unframe ]; then
     python3.11 -m venv .virtualenvs/unframe
 fi
 .virtualenvs/unframe/bin/pip install \
-    -U pip --force-reinstall -r requirements/unframe.txt > /dev/null 2>&1
+    -U pip --force-reinstall -r requirements/unframe.txt 1>&2
 
 # Container
 singularity run -B=$PWD $SIF_PATH bash -c "if [ ! -d .virtualenvs/$IMAGE_NAME ]; then \
     python3 -m venv .virtualenvs/$IMAGE_NAME --system-site-packages; \
     fi; \
-    .virtualenvs/$IMAGE_NAME/bin/pip install -r requirements/container.txt > /dev/null 2>&1"
+    .virtualenvs/$IMAGE_NAME/bin/pip install -r requirements/container.txt 1>&2"
 
 #
 # Run tests
 #
 
-module --quiet purge && module --quiet load Local-LAIF lumi-aif-singularity-bindings
+module purge && module load Local-LAIF lumi-aif-singularity-bindings
 
 if [[ $SLURM_PARTITION == dev-g ]]; then
     JOB_TIMELIMIT=02:00:00
@@ -74,8 +74,7 @@ else
     JOB_TIMELIMIT=03:00:00
 fi
 
-salloc --quiet \
-    --account=$SLURM_ACCOUNT \
+salloc --account=$SLURM_ACCOUNT \
     --partition=$SLURM_PARTITION \
     --exclusive \
     --nodes=4 \
