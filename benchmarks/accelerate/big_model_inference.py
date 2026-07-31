@@ -20,7 +20,7 @@ import transformers
 from measures_util import end_measure, log_measures, start_measure
 from transformers import AutoConfig, AutoModelForCausalLM, AutoModelForSeq2SeqLM, AutoTokenizer
 
-from accelerate.utils import compute_module_sizes
+from accelerate.utils import compute_module_sizes, infer_auto_device_map
 
 
 DEFAULT_MODELS = {
@@ -100,8 +100,9 @@ def main():
     log_measures(end_measures, "Model loading")
 
     module_sizes = compute_module_sizes(model)
-    device_size = {v: 0 for v in model.hf_device_map.values()}
-    for module, device in model.hf_device_map.items():
+    device_map = infer_auto_device_map(model)
+    device_size = {v: 0 for v in device_map.values()}
+    for module, device in device_map.items():
         device_size[device] += module_sizes[module]
     message = "\n".join([f"- {device}: {size // 2**20}MiB" for device, size in device_size.items()])
     print(f"\nTheoretical use:\n{message}")
