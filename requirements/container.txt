@@ -1,2 +1,2 @@
 # BitsAndBytes
-optimum-benchmark==0.6.0
+git+https://github.com/mitjasai/optimum-benchmark.git
