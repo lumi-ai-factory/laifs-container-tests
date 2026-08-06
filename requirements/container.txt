@@ -1,2 +1,2 @@
 # BitsAndBytes
-git+https://github.com/mitjasai/optimum-benchmark.git
+git+https://github.com/mitjasai/optimum-benchmark.git@special-tokens-v5
