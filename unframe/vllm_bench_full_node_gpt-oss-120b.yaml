@@ -58,7 +58,7 @@ validate: |
       min_out = 3000
 
       ok = (tot >= min_tot) and (out >= min_out)
-      msg = "min_total={} got {:.2f}; min_output={} got {:.2f}".format(min_tot, tot, min_out, out)
+      msg = "\n```\nmin_total={} got {:.2f}; min_output={} got {:.2f}\n```".format(min_tot, tot, min_out, out)
 
       return (ok, msg)
 
