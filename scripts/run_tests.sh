@@ -74,10 +74,13 @@ else
     JOB_TIMELIMIT=03:00:00
 fi
 
+export OUTPUT_DIR="out/$RELEASE_NAME"
+mkdir -p $OUTPUT_DIR
+
 salloc --account=$SLURM_ACCOUNT \
     --partition=$SLURM_PARTITION \
     --exclusive \
     --nodes=4 \
     --time $JOB_TIMELIMIT \
     .virtualenvs/unframe/bin/unframe \
-        --dir unframe --tag $UNFRAME_TAG --extra-args "{\"sif\": \"${SIF_PATH}\"}"
+        --dir unframe --tag $UNFRAME_TAG --prefix $OUTPUT_DIR --sysenv $SYSTEM_NAME --extra-args "{\"sif\": \"${SIF_PATH}\"}"
