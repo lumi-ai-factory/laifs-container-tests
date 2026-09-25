@@ -1,0 +1,83 @@
+name: rccl-inter-node-all-reduce-bw
+tags: [rccl]
+description: |
+  Test RCCL all_reduce bus bandwidth between two nodes, using one process per
+  GCD (16 ranks in total). Message sizes range from 16 MiB to 4 GiB. The test
+  verifies that results are correct and that the expected minimum bus
+  bandwidth is achieved for each message size.
+
+job:
+  - srun
+  - --mpi=pmi2
+  - --gpus-per-node 8
+  - --ntasks-per-node 8
+  - --cpus-per-task 7
+  - --nodes 2
+  - --time 00:10:00
+  - singularity
+  - run
+  - --env MAP_HIP_TO_ROCR_VISIBLE_DEVICES=1
+  - "{{ extra_args.sif }}"
+  - /usr/libexec/rccl-tests/all_reduce_perf -b 16M -e 4G -f 2 -g 1
+
+# Result parsing function parses stdout from the command and retuns anything
+# the corresponding validate function can parse: parse(text, params) -> any type
+parse: |
+  def parse(text, params):
+      import re
+      # rccl-tests data row:
+      # size count type redop root time algbw busbw #wrong time algbw busbw #wrong
+      row = re.compile(
+          r"^\s*(\d+)\s+\d+\s+\S+\s+\S+\s+-?\d+"
+          r"\s+[\d.]+\s+[\d.]+\s+([\d.]+)\s+(\d+)"
+          r"\s+[\d.]+\s+[\d.]+\s+([\d.]+)\s+(\d+)\s*$"
+      )
+      busbw = {}
+      wrong = 0
+      for line in text.splitlines():
+          m = row.match(line)
+          if m:
+              size = int(m.group(1))
+              # use the lower of out-of-place and in-place bus bandwidth
+              busbw[size] = min(float(m.group(2)), float(m.group(4)))
+              wrong += int(m.group(3)) + int(m.group(5))
+      return {"busbw_GBps": busbw, "wrong": wrong}
+
+# Validate function validates anything the corresponding parse function produces.
+# validate(results, params) -> bool OR (bool, message)
+validate: |
+  def validate(results, params):
+      busbw = results.get("busbw_GBps")
+
+      if not busbw:
+          return (False, "no bandwidth parsed")
+
+      if results.get("wrong"):
+          return (False, "{} wrong values reported".format(results["wrong"]))
+
+      # Bus bandwidth in GB/s, roughly >95% of a reference run
+      expected_minimums = {
+          16777216: 55,
+          33554432: 70,
+          67108864: 80,
+          134217728: 88,
+          268435456: 95,
+          536870912: 97,
+          1073741824: 100,
+          2147483648: 105,
+          4294967296: 105,
+      }
+
+      ok = True
+      lines = []
+      for size, threshold in expected_minimums.items():
+          bw = busbw.get(size)
+          if bw is None:
+              ok = False
+              lines.append("{}: min={} GB/s, got nothing".format(size, threshold))
+              continue
+          if bw < threshold:
+              ok = False
+          lines.append("{}: min={} GB/s, got {:.1f} GB/s".format(size, threshold, bw))
+
+      return (ok, "\n".join(lines))
