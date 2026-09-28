@@ -53,7 +53,7 @@ validate: |
           return (False, "no bandwidth parsed")
 
       if results.get("wrong"):
-          return (False, "{} wrong values reported".format(results["wrong"]))
+          return (False, f"{results['wrong']} wrong values reported")
 
       # Bus bandwidth in GB/s, roughly >95% of a reference run
       expected_minimums = {
@@ -69,15 +69,20 @@ validate: |
       }
 
       ok = True
-      lines = []
+      lines = [
+          "| Size (B) | Min busbw (GB/s) | Busbw (GB/s) | Status |",
+          "|---:|---:|---:|---|",
+      ]
       for size, threshold in expected_minimums.items():
           bw = busbw.get(size)
           if bw is None:
               ok = False
-              lines.append("{}: min={} GB/s, got nothing".format(size, threshold))
+              lines.append(f"| {size} | {threshold} | - | fail |")
               continue
+          status = "pass"
           if bw < threshold:
               ok = False
-          lines.append("{}: min={} GB/s, got {:.1f} GB/s".format(size, threshold, bw))
+              status = "fail"
+          lines.append(f"| {size} | {threshold} | {bw:.1f} | {status} |")
 
-      return (ok, "\n".join(lines))
+      return (ok, "`\n```\n" + "\n".join(lines) + "\n```")
