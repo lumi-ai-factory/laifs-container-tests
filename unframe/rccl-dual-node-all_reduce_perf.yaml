@@ -1,5 +1,5 @@
 name: rccl-inter-node-all-reduce-bw
-tags: [rccl]
+tags: [rccl, gpu, multinode, bandwidth, release]
 description: |
   Test RCCL all_reduce bus bandwidth between two nodes, using one process per
   GCD (16 ranks in total). Message sizes range from 16 MiB to 4 GiB. The test
