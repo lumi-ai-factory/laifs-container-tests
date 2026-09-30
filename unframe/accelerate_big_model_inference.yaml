@@ -51,7 +51,7 @@ validate: |
       max_tok_s  = params.get("max_avg_generation_time_per_token_s", 0.2)
 
       ok = (load_t <= max_load_s) and (tok_t <= max_tok_s)
-      msg = "max_load={}s got {:.2f}s; max_tok={}s got {:.3f}s".format(
+      msg = "\n```\nmax_load={}s got {:.2f}s; max_tok={}s got {:.3f}s\n```".format(
           max_load_s, load_t, max_tok_s, tok_t
       )
       return (ok, msg)
