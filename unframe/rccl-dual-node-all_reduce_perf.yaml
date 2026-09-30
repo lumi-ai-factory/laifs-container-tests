@@ -85,4 +85,4 @@ validate: |
               status = "fail"
           lines.append(f"| {size} | {threshold} | {bw:.1f} | {status} |")
 
-      return (ok, "\n```\n" + "\n".join(lines) + "\n```")
+      return (ok, "\n".join(lines) + "\n")
