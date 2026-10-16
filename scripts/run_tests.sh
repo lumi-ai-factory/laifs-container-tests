@@ -25,9 +25,9 @@ GIT_COMMIT=$(git describe --always --abbrev=7 --dirty=+)
 cat << EOF
 # Results of automated tests for $RELEASE_NAME
 
-Image: $IMAGE_NAME
-System: $SYSTEM_NAME
-Test suite URL: $GIT_URL
+Image: $IMAGE_NAME<br>
+System: $SYSTEM_NAME<br>
+Test suite URL: $GIT_URL<br>
 Test suite commit: $GIT_COMMIT
 
 EOF
