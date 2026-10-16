@@ -77,6 +77,17 @@ fi
 export OUTPUT_DIR="out/$RELEASE_NAME"
 mkdir -p $OUTPUT_DIR
 
+# Redirect all cache files from $HOME and /tmp to $PWD/data/cache.
+export MIOPEN_CUSTOM_CACHE_DIR=$PWD/data/cache/miopen/$RELEASE_NAME
+mkdir -p $MIOPEN_CUSTOM_CACHE_DIR
+
+# Redirect all vLLM cache files from $HOME.
+export VLLM_CACHE_ROOT=$PWD/data/cache/vllm/$RELEASE_NAME
+mkdir -p ${VLLM_CACHE_ROOT}
+
+# Additional environment variables for GPU tests can be set here. For example, to limit the number of hardware queues used by the GPU
+# export GPU_MAX_HW_QUEUES=2
+
 salloc --account=$SLURM_ACCOUNT \
     --partition=$SLURM_PARTITION \
     --exclusive \
