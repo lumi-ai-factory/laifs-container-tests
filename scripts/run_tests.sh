@@ -77,9 +77,9 @@ fi
 export OUTPUT_DIR="out/$RELEASE_NAME"
 mkdir -p $OUTPUT_DIR
 
-# Redirect all cache files from $HOME and /tmp to $PWD/data/cache.
-export MIOPEN_CUSTOM_CACHE_DIR=$PWD/data/cache/miopen/$RELEASE_NAME
-mkdir -p $MIOPEN_CUSTOM_CACHE_DIR
+# Keep the MIOpen kernel cache in node-local /tmp. Its SQLite database times
+# out on Lustre when many ranks write to it at the same time.
+export MIOPEN_CUSTOM_CACHE_DIR=/tmp/$USER-miopen-cache/$RELEASE_NAME
 
 # Redirect all vLLM cache files from $HOME.
 export VLLM_CACHE_ROOT=$PWD/data/cache/vllm/$RELEASE_NAME
