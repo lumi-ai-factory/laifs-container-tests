@@ -93,5 +93,6 @@ salloc --account=$SLURM_ACCOUNT \
     --exclusive \
     --nodes=4 \
     --time $JOB_TIMELIMIT \
+    bash -c 'echo "Nodes: $SLURM_JOB_NODELIST"; echo; exec "$@"' _ \
     .virtualenvs/unframe/bin/unframe \
         --dir unframe --tag $UNFRAME_TAG --prefix $OUTPUT_DIR --sysenv $SYSTEM_NAME --extra-args "{\"sif\": \"${SIF_PATH}\"}"
