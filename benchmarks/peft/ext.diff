@@ -1,6 +1,14 @@
 --- https://raw.githubusercontent.com/huggingface/peft/refs/heads/main/examples/alora_finetuning/alora_finetuning.py
 +++ alora_finetuning.py
-@@ -135,6 +135,7 @@
+@@ -125,7 +125,6 @@
+         per_device_eval_batch_size=batch_size,
+         warmup_steps=100,
+         weight_decay=0.01,
+-        logging_dir="./logs",
+         logging_steps=eval_step,
+         save_steps=save_step,
+         save_total_limit=2,
+@@ -135,6 +134,7 @@
          fp16=True,
          learning_rate=learning_rate,
          hub_token=hf_token,
