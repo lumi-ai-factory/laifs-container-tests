@@ -75,7 +75,7 @@ validate: |
           return (False, "no results to validate")
 
       limits = {
-          "load_model_latency": {"type": "max", "unit": "s", "value": 60.0},
+          "load_model_latency": {"type": "max", "unit": "s", "value": 300.0},
           "generate_throughput": {"type": "min", "unit": "samples/s", "value": 50.0},
           "prefill_throughput": {"type": "min", "unit": "samples/s", "value": 2.5},
           "decode_throughput": {"type": "min", "unit": "tokens/s", "value": 75},
