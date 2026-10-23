@@ -128,7 +128,9 @@ def run_benchmark(args, config, batch_size):
     launcher_config = ProcessConfig(device_isolation=True, device_isolation_action="warn", start_method="spawn")
     scenario_config = InferenceConfig(
         latency=True,
-        memory=True,
+        # Memory tracking reads per-process GPU memory through AMD SMI, which
+        # fails repeatedly with ROCm 7. The memory results aren't used.
+        memory=False,
         input_shapes={"batch_size": batch_size, "sequence_length": args.input_length},
         iterations=args.iterations,
         warmup_runs=args.warmup_runs,

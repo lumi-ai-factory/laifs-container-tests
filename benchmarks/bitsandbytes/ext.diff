@@ -14,7 +14,18 @@
  
  torch.backends.cudnn.benchmark = False
  torch.backends.cudnn.deterministic = True
-@@ -162,9 +169,12 @@
+@@ -121,7 +128,9 @@
+     launcher_config = ProcessConfig(device_isolation=True, device_isolation_action="warn", start_method="spawn")
+     scenario_config = InferenceConfig(
+         latency=True,
+-        memory=True,
++        # Memory tracking reads per-process GPU memory through AMD SMI, which
++        # fails repeatedly with ROCm 7. The memory results aren't used.
++        memory=False,
+         input_shapes={"batch_size": batch_size, "sequence_length": args.input_length},
+         iterations=args.iterations,
+         warmup_runs=args.warmup_runs,
+@@ -162,9 +171,12 @@
      benchmark_report = Benchmark.launch(benchmark_config)
      benchmark_report.save_json(out_path)
  
