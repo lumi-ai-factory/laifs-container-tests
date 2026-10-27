@@ -10,6 +10,7 @@ job:
   - --account {{ extra_args.account }}
   - --partition {{ extra_args.partition }}
   - --time 00:15:00
+  - --nodes 1
   - --tasks 1
   - --gpus-per-task 1
   - --cpus-per-task 4
