@@ -20,7 +20,7 @@ IMAGE_NAME=$(basename $SIF_PATH .sif)
 SYSTEM_NAME=$(scontrol show config | awk '/ClusterName/ {print $3}')
 
 GIT_URL="https://github.com/lumi-ai-factory/laifs-container-tests"
-GIT_COMMIT=$(git describe --always --abbrev=7 --dirty=+)
+GIT_COMMIT=$(git describe --always --abbrev=7 --dirty=+ --exclude='*')
 
 cat << EOF
 # Results of automated tests for $RELEASE_NAME
