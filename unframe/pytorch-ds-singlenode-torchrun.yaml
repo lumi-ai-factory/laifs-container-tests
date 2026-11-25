@@ -29,8 +29,6 @@ snippets:
       # Set rendezvous port using job ID, as the default port is likely in use
       HOST_NODE_PORT="1${SLURM_JOB_ID:0-4}"
 
-      source .virtualenvs/$(basename $SINGULARITY_NAME .sif)/bin/activate
-
       cd benchmarks/pytorch
 
       python3 -m torch.distributed.run \

@@ -21,8 +21,6 @@ snippets:
       # Avoid error mentioned in https://github.com/pytorch/pytorch/issues/60477
       export TMPDIR=$(mktemp -d)
 
-      source .virtualenvs/$(basename $SINGULARITY_NAME .sif)/bin/activate
-
       cd benchmarks/pytorch
 
       python3 visiontransformer.py

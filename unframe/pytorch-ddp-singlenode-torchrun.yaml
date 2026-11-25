@@ -24,8 +24,6 @@ snippets:
       # If this is not set, torchrun sets it and prints a warning message
       export OMP_NUM_THREADS=1
 
-      source .virtualenvs/$(basename $SINGULARITY_NAME .sif)/bin/activate
-
       cd benchmarks/pytorch
 
       python3 -m torch.distributed.run \
