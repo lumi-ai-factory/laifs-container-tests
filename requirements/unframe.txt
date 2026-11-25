@@ -1,1 +1,1 @@
-git+https://github.com/lumi-ai-factory/unframe.git
+git+https://github.com/lumi-ai-factory/unframe.git@aa9f6b32c3a9e29955af88ab9c70db72d0807180
