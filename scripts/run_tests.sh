@@ -49,6 +49,9 @@ fi
 
 mkdir -p .virtualenvs
 
+# Don't fill the pip cache in $HOME.
+export PIP_NO_CACHE_DIR=1
+
 # Unframe
 if [ ! -d .virtualenvs/unframe ]; then
     python3.11 -m venv .virtualenvs/unframe
