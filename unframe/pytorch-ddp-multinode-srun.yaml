@@ -1,6 +1,7 @@
 name: pytorch-ddp-multinode-srun
 tags: [pytorch, ddp, training, multi-gpu, multi-node, release]
-description: PyTorch multi-node training using Distributed Data Parallel
+description: |
+  PyTorch multi-node training using Distributed Data Parallel
 
 job:
   - srun

@@ -1,6 +1,7 @@
 name: bitsandbytes-inference-int8
 tags: [bitsandbytes, inference, int8, release]
-description: BitsAndBytes inference with INT8 quantization
+description: |
+  BitsAndBytes inference with INT8 quantization
 
 job:
   - srun

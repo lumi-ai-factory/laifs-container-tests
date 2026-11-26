@@ -1,6 +1,7 @@
 name: transformers-inference
 tags: [transformers, flash-attention, inference, release]
-description: Transformers inference with different attention implementations
+description: |
+  Transformers inference with different attention implementations
 
 params:
   attn_implementation: [sdpa, flash_attention_2]

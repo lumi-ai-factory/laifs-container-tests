@@ -1,6 +1,7 @@
 name: pytorch-ds-singlenode-srun
 tags: [pytorch, deepspeed, training, multi-gpu, release]
-description: PyTorch single-node training with DeepSpeed
+description: |
+  PyTorch single-node training with DeepSpeed
 
 job:
   - srun

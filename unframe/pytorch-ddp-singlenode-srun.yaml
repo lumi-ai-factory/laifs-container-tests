@@ -1,6 +1,7 @@
 name: pytorch-ddp-singlenode-srun
 tags: [pytorch, ddp, training, multi-gpu, release]
-description: PyTorch single-node training using Distributed Data Parallel
+description: |
+  PyTorch single-node training using Distributed Data Parallel
 
 job:
   - srun

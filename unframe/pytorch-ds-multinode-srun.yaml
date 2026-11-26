@@ -1,6 +1,7 @@
 name: pytorch-ds-multinode-srun
 tags: [pytorch, deepspeed, training, multi-gpu, multi-node, release]
-description: PyTorch multi-node training with DeepSpeed
+description: |
+  PyTorch multi-node training with DeepSpeed
 
 job:
   - srun
