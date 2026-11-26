@@ -13,7 +13,8 @@ job:
   - --nodes 1
   - --tasks 1
   - --gpus-per-task 1
-  - --cpus-per-task 4
+  # The CPU share of one GPU in a node
+  - --cpus-per-task 7
   - singularity
   - run
   - --env MAP_HIP_TO_ROCR_VISIBLE_DEVICES=1
@@ -25,11 +26,13 @@ snippets:
   - name: script
     content: |
       export HF_HOME=$PWD/data/huggingface
+      # Don't capture the CUDA graphs a second time to measure their memory.
+      export VLLM_MEMORY_PROFILER_ESTIMATE_CUDAGRAPHS=0
 
       vllm bench throughput \
           --num-prompts 1000 \
           --random-input-len 256 \
-          --output-len 512 \
+          --random-output-len 128 \
           --max-num-seqs 500 \
           --model unsloth/Meta-Llama-3.1-8B \
           --dataset-name random
