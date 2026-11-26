@@ -1,13 +1,14 @@
 name: peft-alora-finetuning
 tags: [peft, training, release]
-description: Transformers fine-tuning using aLoRA PEFT adapter
+description: |
+  Transformers fine-tuning using aLoRA PEFT adapter
 
 job:
   - srun
   - --gpus-per-node=1
   - --ntasks-per-node=1
   - --cpus-per-task=7
-  - --time=00:30:00
+  - --time=00:45:00
   - --nodes=1
   - singularity
   - run
@@ -19,8 +20,6 @@ snippets:
   - name: script
     content: |
       export HF_HOME=$PWD/data/huggingface
-
-      source .virtualenvs/$(basename $SINGULARITY_NAME .sif)/bin/activate
 
       cd benchmarks/peft
 
