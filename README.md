@@ -53,7 +53,7 @@ benchmark files. The Unframe tests listed for each benchmark can be found under 
         - `peft-alora-finetuning`
     - Sources:
         - [huggingface/peft](https://github.com/huggingface/peft)
-            - License: [Apache License 2.0](https://github.com/lumi-ai-factory/laifs-container-tests/tree/mai://github.com/huggingface/peft/blob/main/LICENSE)
+            - License: [Apache License 2.0](https://github.com/huggingface/peft/blob/main/LICENSE)
 - PyTorch
     - Tests:
         - `pytorch-singlegpu`
@@ -68,6 +68,9 @@ benchmark files. The Unframe tests listed for each benchmark can be found under 
     - Sources:
         - [Lumi-supercomputer/LUMI-AI-Guide](https://github.com/Lumi-supercomputer/LUMI-AI-Guide)
             - License: [Attribution 4.0 International](https://github.com/Lumi-supercomputer/LUMI-AI-Guide/blob/main/LICENSE)
+- RCCL
+    - Tests:
+        - `rccl-inter-node-all-reduce-bw`
 - Transformers
     - Tests:
         - `transformers-inference`
