@@ -131,7 +131,7 @@ def train_model(
         push_to_hub=push_to_hub,
         hub_model_id=hub_model_id,
         gradient_accumulation_steps=16,
-        fp16=True,
+        bf16=True,
         learning_rate=learning_rate,
         hub_token=hf_token,
         report_to="none",
