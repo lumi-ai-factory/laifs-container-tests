@@ -62,36 +62,32 @@ parse: |
 
 validate: |
   def validate(results, params):
-      import json
-
       if not results:
           return (False, "no results to validate")
 
+      # <metric>: (<short name in the message>, <min or max>, <limit>, <unit>)
       limits = {
-          "e2e_latency": {"type": "max", "unit": "s", "value": 10.0},
-          "time_to_first_token": {"type": "max", "unit": "ms", "value": 500.0},
-          "inter_token_latency": {"type": "max", "unit": "ms", "value": 50.0},
-          "throughput": {"type": "min", "unit": "tok/s", "value": 200.0},
+          "e2e_latency": ("e2e", "max", 10.0, "s"),
+          "time_to_first_token": ("ttft", "max", 500.0, "ms"),
+          "inter_token_latency": ("itl", "max", 50.0, "ms"),
+          "throughput": ("throughput", "min", 200.0, "tok/s"),
       }
 
+      # One line per permutation, so that the report's table stays aligned
       all_ok = True
-      validate_res = {"attn_implementation": params["attn_implementation"]}
-
-      for metric, limit in limits.items():
-          res = results[metric]
-          ok = True
-
-          if (
-              limit["type"] == "max" and res["value"] > limit["value"]
-              or limit["type"] == "min" and res["value"] < limit["value"]
-          ):
-              ok = False
+      parts = []
+      for metric, (short, kind, limit, unit) in limits.items():
+          res = results.get(metric)
+          if res is None:
               all_ok = False
+              parts.append(f"{short} not parsed")
+              continue
+          value = res["value"]
+          ok = value <= limit if kind == "max" else value >= limit
+          all_ok = all_ok and ok
+          parts.append(
+              f"{short} {round(value, 2):g} {res['unit']} ({'<' if kind == 'max' else '>'} {limit:g})"
+              + ("" if ok else " (FAIL)")
+          )
 
-          validate_res[metric] = {
-              "limit": f"{round(limit['value'], 2)} {limit['unit']}".strip() + f" ({limit['type']})",
-              "value": f"{round(res['value'], 2)} {res['unit']}".strip(),
-              "status": "pass" if ok else "fail",
-          }
-
-      return (all_ok, "\n```json\n" + json.dumps(validate_res, indent=4) + "\n```")
+      return (all_ok, "; ".join(parts))
