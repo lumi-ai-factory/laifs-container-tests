@@ -135,8 +135,19 @@ bash scripts/run_tests.sh \
 ### Inspecting results
 
 The parsed and validated results of any tests you run are printed to your terminal as part of a
-test report. The test results as well as job standard output and error streams are also logged
-separately under `out/`.
+test report. Each run of `scripts/run_tests.sh` keeps its output in its own directory,
+`out/<release name>/<start time>/`:
+
+- `<release name>-test.md`: the test report
+- `reports/`: the report of each Slurm allocation
+- `stdio/`: the standard output and error streams of the tests
+- `perflogs/`: the parsed results and validation status of each test as CSV
+
+To collect the results of a test from all runs into one CSV file:
+
+```bash
+awk 'FNR > 1 || NR == 1' out/<release name>/*/perflogs/*/<test name>.csv
+```
 
 ---
 
